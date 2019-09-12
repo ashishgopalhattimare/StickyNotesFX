@@ -93,7 +93,28 @@ public class NoteController implements Initializable {
         });
 
         noteArea.setOnKeyReleased(event -> {
-            if(cardDetail != null) cardDetail.getCard().textArea.setText(noteArea.getText());
+            if(cardDetail != null) {
+                cardDetail.getCard().textArea.setText(noteArea.getText());
+
+                if(noteArea.getText().length() > 0) { // if the note is not empty
+                    if(StickyController.s_recyclerView.getItems().get(0) != cardDetail) {
+
+                        StickyController.s_recyclerView.getItems().remove(cardDetail);
+                        StickyController.s_recyclerView.getItems().add(0, cardDetail);
+                    }
+                }
+                else { // if the note is empty, remove it from the Sticky List
+                    StickyController.s_recyclerView.getItems().remove(cardDetail);
+                    cardDetail = null;
+                }
+            }
+            else {
+                // note does not exist, and is not empty -> place it at the top of the Sticky List
+                if(noteArea.getText().length() > 0) {
+                    cardDetail = new CardDetail(noteArea.getText() , "10 Sep", initialColor);
+                    StickyController.s_recyclerView.getItems().add(0, cardDetail);
+                }
+            }
         });
 
         initialColor = Constants.randomColor;
@@ -158,7 +179,7 @@ public class NoteController implements Initializable {
     {
         if(cardDetail != null)
         {
-            StickyController.s_recyclerView.getItems().remove(cardDetail); 
+            StickyController.s_recyclerView.getItems().remove(cardDetail);
         }
 
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
