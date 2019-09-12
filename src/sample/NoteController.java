@@ -154,13 +154,14 @@ public class NoteController implements Initializable {
         note_y = event.getSceneY();
     }
 
-    private void deleteNote(MouseEvent event) {
-        if(cardDetail == null) {
-            System.out.println("This not is not present in the list.. new note");
+    private void deleteNote(MouseEvent event)
+    {
+        if(cardDetail != null)
+        {
+            StickyController.s_recyclerView.getItems().remove(cardDetail);
         }
-        else {
-            System.out.println("Exists.. delete from there as well");
-        }
-        deleteButton.setStyle("-fx-background-color:" + Constants.selectColor);
+
+        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        stage.close();
     }
 }

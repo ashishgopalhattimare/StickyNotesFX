@@ -55,8 +55,6 @@ public class StickyController implements Initializable {
         adapter = new Adapter();
         recyclerView.setAdapter(adapter);
 
-        if(recyclerView == null) s_recyclerView = recyclerView;
-
         cardList.add(new CardDetail("Surbhi" , "10 Sep", (int) (Math.random() * Constants.LENGTH)));
         cardList.add(new CardDetail("Ashish" , "11 Sep", (int) (Math.random() * Constants.LENGTH)));
         cardList.add(new CardDetail("Yogesh" , "12 Sep", (int) (Math.random() * Constants.LENGTH)));
@@ -65,6 +63,8 @@ public class StickyController implements Initializable {
 
         for(CardDetail x : cardList) recyclerView.getItems().add(x);
         PopUpOpen = false;
+
+        if(s_recyclerView == null) s_recyclerView = recyclerView;
 
         createPopUpMenu();
 
@@ -82,7 +82,7 @@ public class StickyController implements Initializable {
         addButton.setOnMouseExited(event -> addButton.setStyle("-fx-background-color:#000"));
         addButton.setOnMouseClicked(event -> {
             try { initNewNote("", -1); addButton.setStyle("-fx-background-color:#595959"); }
-            catch (Exception e) {}
+            catch (Exception e) { e.printStackTrace(); }
         });
 
         closeButton.setOnMouseEntered(event -> closeButton.setStyle("-fx-background-color:#595959"));
@@ -200,8 +200,8 @@ public class StickyController implements Initializable {
         if(index == -1) Constants.randomColor = (int) (Math.random() * Constants.LENGTH);
         else {
             Constants.randomColor = cardList.get(index).getColor();
+            Constants.card = cardList.get(index);
         }
-        Constants.card = cardList.get(index);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("note.fxml"));
         Parent root = loader.load();
