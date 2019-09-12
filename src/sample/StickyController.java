@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -181,6 +182,7 @@ public class StickyController implements Initializable {
 
             selectedTile = recyclerView.getSelectionModel().getSelectedIndex();
             popoverMenu.hide();
+
             try {
                 initNewNote(
                         "public class A {\n" +
@@ -199,6 +201,7 @@ public class StickyController implements Initializable {
         else {
             Constants.randomColor = cardList.get(index).getColor();
         }
+        Constants.card = cardList.get(index);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("note.fxml"));
         Parent root = loader.load();
@@ -230,6 +233,7 @@ public class StickyController implements Initializable {
         public void onBindViewHolder(Card card, Object obj) {
 
             CardDetail cd = (CardDetail)obj;
+            cd.setCard(card);
 
             card.textArea.setText(cd.getText());
             card.date.setText(cd.getDate());
@@ -262,16 +266,16 @@ public class StickyController implements Initializable {
             });
         }
     }
+}
 
-    static class Card extends RecyclerView.ViewHolder {
+class Card extends RecyclerView.ViewHolder {
 
-        @FXML private JFXTextArea textArea;
-        @FXML private Label date;
-        @FXML private Pane colorPane;
-        @FXML private BorderPane cardBorderPane;
+    @FXML public Label textArea;
+    @FXML public Label date;
+    @FXML public Pane colorPane;
+    @FXML public BorderPane cardBorderPane;
 
-        public Card(FXMLLoader loader) {
-            super(loader);
-        }
+    public Card(FXMLLoader loader) {
+        super(loader);
     }
 }

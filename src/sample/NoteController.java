@@ -35,6 +35,7 @@ public class NoteController implements Initializable {
     private boolean colorDisplay, fadeInProcess;
     private double note_x, note_y;
     private int initialColor;
+    private CardDetail cardDetail;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -72,10 +73,7 @@ public class NoteController implements Initializable {
         deleteButton.setOnMouseEntered(event -> deleteButton.setStyle("-fx-background-color:" + Constants.selectColor));
         deleteButton.setOnMouseReleased(event -> deleteButton.setStyle(""));
         deleteButton.setOnMouseExited(event -> deleteButton.setStyle(""));
-        deleteButton.setOnMouseClicked(event -> {
-            System.out.println("delete this note");
-            deleteButton.setStyle("-fx-background-color:" + Constants.selectColor);
-        });
+        deleteButton.setOnMouseClicked(this::deleteNote);
 
         ellipseButton.setOnMouseEntered(event -> ellipseButton.setStyle("-fx-background-color:" + Constants.selectColor));
         ellipseButton.setOnMouseReleased(event -> ellipseButton.setStyle(""));
@@ -94,8 +92,15 @@ public class NoteController implements Initializable {
             }
         });
 
+        noteArea.setOnKeyReleased(event -> {
+            if(cardDetail != null) cardDetail.getCard().textArea.setText(noteArea.getText());
+        });
+
         initialColor = Constants.randomColor;
         fillTitleBarColor(Constants.hexColor[initialColor]);
+
+        cardDetail = Constants.card;
+        Constants.card = null;
     }
 
     private void fillTitleBarColor(String color) {
@@ -147,5 +152,15 @@ public class NoteController implements Initializable {
     @FXML public void mousePressed(MouseEvent event) {
         note_x = event.getSceneX();
         note_y = event.getSceneY();
+    }
+
+    private void deleteNote(MouseEvent event) {
+        if(cardDetail == null) {
+            System.out.println("This not is not present in the list.. new note");
+        }
+        else {
+            System.out.println("Exists.. delete from there as well");
+        }
+        deleteButton.setStyle("-fx-background-color:" + Constants.selectColor);
     }
 }

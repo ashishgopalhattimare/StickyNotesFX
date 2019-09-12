@@ -92,7 +92,7 @@
                         </FlowPane>
                         <BorderPane fx:id="clearBorder" prefHeight="50.0" prefWidth="310.0" style="-fx-background-color: #000;">
                             <center>
-                                <JFXTextField fx:id="searchField" focusColor="TRANSPARENT" onKeyReleased="#keyReleased" prefHeight="35.0" promptText="Search..." style="-fx-border-color: #737373; -fx-background-color: #737373; -fx-text-fill: #fff;" text="This is it" unFocusColor="TRANSPARENT" BorderPane.alignment="CENTER">
+                                <JFXTextField fx:id="searchField" focusColor="TRANSPARENT" onKeyReleased="#keyReleased" prefHeight="35.0" promptText="Search..." style="-fx-border-color: #737373; -fx-background-color: #737373; -fx-text-fill: #fff;" unFocusColor="TRANSPARENT" BorderPane.alignment="CENTER">
                                     <font>
                                         <Font size="13.0" />
                                     </font>

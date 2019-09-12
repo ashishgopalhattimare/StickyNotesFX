@@ -10,4 +10,5 @@ public class Constants {
     public static final String selectColor = "#d9d9d9";
 
     public static int randomColor;
+    public static CardDetail card;
 }
