@@ -1,5 +1,7 @@
 package sample;
 
+import java.time.LocalDateTime;
+
 public class Constants {
 
     public static int WINDOW_WIDTH, WINDOW_HEIGHT;
@@ -11,4 +13,8 @@ public class Constants {
 
     public static int randomColor;
     public static CardDetail card;
+
+    public static LocalDateTime getDateTime() {
+        return LocalDateTime.now();
+    }
 }

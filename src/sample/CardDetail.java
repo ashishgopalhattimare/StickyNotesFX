@@ -1,15 +1,22 @@
 package sample;
 
+import java.time.LocalDateTime;
+
 public class CardDetail
 {
     private String text, date;
     private int color;
-
     private Card card;
 
-    public CardDetail(String text, String date, int color) {
-        this.text = text; this.date = date;
-        this.color = color;
+    private LocalDateTime dateTime;
+
+    public CardDetail(String text, int color) {
+        this.text = text; this.color = color;
+        setDateTime();
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String getText() { return text; }
@@ -20,4 +27,9 @@ public class CardDetail
         this.card = card;
     }
     public Card getCard() { return card; }
+
+    public void setDateTime() {
+        dateTime = Constants.getDateTime();
+        date = dateTime.toString();
+    }
 }

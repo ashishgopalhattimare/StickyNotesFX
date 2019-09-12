@@ -95,24 +95,36 @@ public class NoteController implements Initializable {
         noteArea.setOnKeyReleased(event -> {
             if(cardDetail != null) {
                 cardDetail.getCard().textArea.setText(noteArea.getText());
+                cardDetail.setText(noteArea.getText());
 
                 if(noteArea.getText().length() > 0) { // if the note is not empty
+
+                    cardDetail.setDateTime();
                     if(StickyController.s_recyclerView.getItems().get(0) != cardDetail) {
 
                         StickyController.s_recyclerView.getItems().remove(cardDetail);
+                        StickyController.cardList.remove(cardDetail);
+
                         StickyController.s_recyclerView.getItems().add(0, cardDetail);
+                        StickyController.cardList.add(0, cardDetail);
+                    }
+                    else {
+                        cardDetail.getCard().date.setText(cardDetail.getDate());
                     }
                 }
                 else { // if the note is empty, remove it from the Sticky List
                     StickyController.s_recyclerView.getItems().remove(cardDetail);
+                    StickyController.cardList.remove(cardDetail);
                     cardDetail = null;
                 }
             }
             else {
                 // note does not exist, and is not empty -> place it at the top of the Sticky List
                 if(noteArea.getText().length() > 0) {
-                    cardDetail = new CardDetail(noteArea.getText() , "10 Sep", initialColor);
+                    cardDetail = new CardDetail(noteArea.getText(), initialColor);
+
                     StickyController.s_recyclerView.getItems().add(0, cardDetail);
+                    StickyController.cardList.add(0, cardDetail);
                 }
             }
         });

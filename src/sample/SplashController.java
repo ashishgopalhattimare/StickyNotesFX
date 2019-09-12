@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -18,7 +17,6 @@ import java.util.ResourceBundle;
 
 public class SplashController implements Initializable {
 
-    private static final int PAUSE = 2;
     @FXML private JFXProgressBar progressBar;
 
     @Override
@@ -35,7 +33,6 @@ public class SplashController implements Initializable {
                 Parent root = FXMLLoader.load(getClass().getResource("stickyframe.fxml"));
 
                 primaryStage.getIcons().add(new Image("/images/logo.png"));
-                primaryStage.initStyle(StageStyle.UNDECORATED);
                 primaryStage.setScene(new Scene(root));
                 primaryStage.show();
 

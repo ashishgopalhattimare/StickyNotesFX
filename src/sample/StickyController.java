@@ -55,11 +55,11 @@ public class StickyController implements Initializable {
         adapter = new Adapter();
         recyclerView.setAdapter(adapter);
 
-        cardList.add(new CardDetail("Surbhi" , "10 Sep", (int) (Math.random() * Constants.LENGTH)));
-        cardList.add(new CardDetail("Ashish" , "11 Sep", (int) (Math.random() * Constants.LENGTH)));
-        cardList.add(new CardDetail("Yogesh" , "12 Sep", (int) (Math.random() * Constants.LENGTH)));
-        cardList.add(new CardDetail("Vinnet" , "13 Sep", (int) (Math.random() * Constants.LENGTH)));
-        cardList.add(new CardDetail("Dogras" , "14 Sep", (int) (Math.random() * Constants.LENGTH)));
+        cardList.add(new CardDetail("Surbhi", 0));
+        cardList.add(new CardDetail("Ashish", 1));
+        cardList.add(new CardDetail("Yogesh", 2));
+        cardList.add(new CardDetail("Vinnet", 3));
+        cardList.add(new CardDetail("Dogras", 4));
 
         for(CardDetail x : cardList) recyclerView.getItems().add(x);
         PopUpOpen = false;
@@ -184,12 +184,7 @@ public class StickyController implements Initializable {
             popoverMenu.hide();
 
             try {
-                initNewNote(
-                        "public class A {\n" +
-                                "    public static void main(String[] args) {\n" +
-                                "        System.out.println(\"Hello World\");\n" +
-                                "    }\n" +
-                                "}", selectedTile);
+                initNewNote(cardList.get(selectedTile).getText(), selectedTile);
             }
             catch (Exception ignored) { }
         });
