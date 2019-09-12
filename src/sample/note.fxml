@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane minHeight="300.0" minWidth="450.0" prefHeight="300.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.NoteController">
+   <center>
+      <BorderPane prefHeight="200.0" prefWidth="474.0" BorderPane.alignment="CENTER">
+         <center>
+            <JFXTextArea fx:id="noteArea" focusColor="#405aa800" promptText="Take a Note" style="-fx-background-color: #595959; -fx-background-radius: 0; -fx-text-fill: #fff;" unFocusColor="#4d4d4d00" wrapText="true" BorderPane.alignment="TOP_LEFT">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <font>
+                  <Font name="Candara" size="14.0" />
+               </font>
+            </JFXTextArea>
+         </center>
+      </BorderPane>
+   </center>
+   <top>
+      <BorderPane prefHeight="35.0" prefWidth="474.0" BorderPane.alignment="CENTER">
+         <left>
+            <FlowPane fx:id="leftPane" prefHeight="35.0" prefWidth="127.0" style="-fx-background-color: #00ff00;" BorderPane.alignment="CENTER">
+               <children>
+                  <BorderPane fx:id="addButton" prefHeight="35.0" prefWidth="35.0">
+                     <center>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                           <image>
+                              <Image url="@../images/addBlack.png" />
+                           </image>
+                        </ImageView>
+                     </center>
+                  </BorderPane>
+                  <BorderPane fx:id="deleteButton" prefHeight="35.0" prefWidth="35.0">
+                     <center>
+                        <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                           <image>
+                              <Image url="@../images/garbage.png" />
+                           </image>
+                        </ImageView>
+                     </center>
+                  </BorderPane>
+                  <BorderPane fx:id="progressBar" prefHeight="35.0" prefWidth="35.0">
+                     <center>
+                        <ProgressIndicator prefHeight="18.0" prefWidth="20.0" style="-fx-accent: #000;" BorderPane.alignment="CENTER" />
+                     </center>
+                     <padding>
+                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                     </padding>
+                  </BorderPane>
+               </children>
+            </FlowPane>
+         </left>
+         <right>
+            <FlowPane fx:id="rightPane" alignment="TOP_RIGHT" prefHeight="35.0" prefWidth="287.0" style="-fx-background-color: #00ff00;" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane fx:id="separator" prefHeight="35.0" prefWidth="2.0" style="-fx-background-color: #fff;" />
+                  <JFXButton fx:id="color1" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #ffd11a;" text=" " />
+                  <JFXButton fx:id="color2" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #00cc00;" text=" " />
+                  <JFXButton fx:id="color3" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #ff80ff;" text=" " />
+                  <JFXButton fx:id="color4" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #d966ff;" text=" " />
+                  <JFXButton fx:id="color5" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #4db8ff;" text=" " />
+                  <JFXButton fx:id="color6" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #b3b3b3;" text=" " />
+                  <JFXButton fx:id="color7" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #404040;" text=" " />
+                  <BorderPane fx:id="ellipseButton" prefHeight="35.0" prefWidth="35.0">
+                     <center>
+                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                           <image>
+                              <Image url="@../images/ellipsis.png" />
+                           </image>
+                        </ImageView>
+                     </center>
+                  </BorderPane>
+               </children>
+            </FlowPane>
+         </right>
+         <center>
+            <Pane fx:id="midPane" onMouseDragged="#mouseDragged" onMousePressed="#mousePressed" prefHeight="35.0" prefWidth="238.0" style="-fx-background-color: #00ff00;" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
+   </top>
+</BorderPane>
