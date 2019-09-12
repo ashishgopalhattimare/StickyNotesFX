@@ -8,12 +8,18 @@ public class CardDetail
     private int color;
     private Card card;
 
+    private boolean open;
+
     private LocalDateTime dateTime;
 
     public CardDetail(String text, int color) {
         this.text = text; this.color = color;
+        open = false;
         setDateTime();
     }
+
+    public boolean  isOpen() { return open; }
+    public void changeOpen(boolean x) { this.open = x; }
 
     public void setText(String text) {
         this.text = text;
@@ -31,5 +37,7 @@ public class CardDetail
     public void setDateTime() {
         dateTime = Constants.getDateTime();
         date = dateTime.toString();
+
+//        date = dateTime.getDayOfMonth() + " " + dateTime.getMonth().toString().substring(0, 3);
     }
 }

@@ -3,7 +3,9 @@ package sample;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.animation.FadeTransition;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,6 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -62,10 +65,11 @@ public class NoteController implements Initializable {
                 stage.getIcons().add(new Image("/images/logo.png"));
                 stage.setTitle("Sticky Note");
 
-                Constants.randomColor = (int) (Math.random() * Constants.LENGTH);
-                stage.show();
-
                 addButton.setStyle("-fx-background-color:" + Constants.selectColor);
+                Constants.randomColor = (int) (Math.random() * Constants.LENGTH);
+
+                Constants.currStage = stage;
+                stage.show();
             }
             catch (Exception e) {}
         });
@@ -99,7 +103,9 @@ public class NoteController implements Initializable {
 
                 if(noteArea.getText().length() > 0) { // if the note is not empty
 
+                    cardDetail.changeOpen(true);
                     cardDetail.setDateTime();
+
                     if(StickyController.s_recyclerView.getItems().get(0) != cardDetail) {
 
                         StickyController.s_recyclerView.getItems().remove(cardDetail);
@@ -122,6 +128,7 @@ public class NoteController implements Initializable {
                 // note does not exist, and is not empty -> place it at the top of the Sticky List
                 if(noteArea.getText().length() > 0) {
                     cardDetail = new CardDetail(noteArea.getText(), initialColor);
+                    cardDetail.changeOpen(true);
 
                     StickyController.s_recyclerView.getItems().add(0, cardDetail);
                     StickyController.cardList.add(0, cardDetail);
@@ -192,6 +199,7 @@ public class NoteController implements Initializable {
         if(cardDetail != null)
         {
             StickyController.s_recyclerView.getItems().remove(cardDetail);
+            StickyController.cardList.remove(cardDetail);
         }
 
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();

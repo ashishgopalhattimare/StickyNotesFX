@@ -33,6 +33,7 @@ public class StickyController implements Initializable {
     private HBox openBox, deleteBox;
     private Label openLabel, deleteLabel;
     private ImageView openImage, deleteImage;
+    private BorderPane openBorder, deleteBorder;
 
     private Adapter adapter;
 
@@ -56,10 +57,8 @@ public class StickyController implements Initializable {
         recyclerView.setAdapter(adapter);
 
         cardList.add(new CardDetail("Surbhi", 0));
-        cardList.add(new CardDetail("Ashish", 1));
-        cardList.add(new CardDetail("Yogesh", 2));
-        cardList.add(new CardDetail("Vinnet", 3));
-        cardList.add(new CardDetail("Dogras", 4));
+        cardList.add(new CardDetail("Ashish", 2));
+        cardList.add(new CardDetail("Yogesh", 4));
 
         for(CardDetail x : cardList) recyclerView.getItems().add(x);
         PopUpOpen = false;
@@ -89,6 +88,9 @@ public class StickyController implements Initializable {
         closeButton.setOnMouseReleased(event -> closeButton.setStyle("-fx-background-color:#000"));
         closeButton.setOnMouseExited(event -> closeButton.setStyle("-fx-background-color:#000"));
         closeButton.setOnMouseClicked(event -> {
+
+            System.out.println("SYNC ALL NOTES TO DATABASE");
+
             Stage stage = (Stage) closeButton.getScene().getWindow();
             stage.close();
         });
@@ -146,13 +148,23 @@ public class StickyController implements Initializable {
         deleteLabel = new Label("Delete note");
         openLabel = new Label("Open note");
 
-        deleteLabel.setPrefSize(90, 35);
-        openLabel.setPrefSize(90, 35);
+        deleteImage = new ImageView(new Image("images/garbage.png"));
+        openImage = new ImageView(new Image("images/open.png"));
 
-        deleteLabel.setAlignment(Pos.CENTER); deleteLabel.setStyle("-fx-background-color:#737373; -fx-text-fill:#fff");
-        openLabel.setAlignment(Pos.CENTER); openLabel.setStyle("-fx-background-color:#737373; -fx-text-fill:#fff");
+        deleteImage.setPreserveRatio(true); openImage.setPreserveRatio(true);
+        deleteImage.setFitHeight(20); openImage.setFitHeight(20);
 
-        deleteBox = new HBox(deleteLabel); openBox = new HBox(openLabel);
+        openBorder = new BorderPane(); deleteBorder = new BorderPane();
+
+        openBorder.setCenter(openImage); deleteBorder.setCenter(deleteImage);
+
+        deleteBorder.setPrefSize(25, 35); openBorder.setPrefSize(25, 35);
+        deleteLabel.setPrefSize(80, 35); openLabel.setPrefSize(80, 35);
+
+        deleteLabel.setAlignment(Pos.CENTER); openLabel.setAlignment(Pos.CENTER);
+
+        deleteBox = new HBox(deleteBorder, deleteLabel); deleteBox.setStyle("-fx-background-color: #737373");
+        openBox = new HBox(openBorder, openLabel); openBox.setStyle("-fx-background-color: #737373");
 
         VBox box = new VBox(openBox, deleteBox);
 
@@ -162,16 +174,15 @@ public class StickyController implements Initializable {
         popoverMenu.setCornerRadius(0);
         popoverMenu.setContentNode(box);
 
-        deleteBox.setOnMouseEntered(event -> deleteLabel.setStyle("-fx-background-color: #bfbfbf"));
-        openBox.setOnMouseEntered(event -> openLabel.setStyle("-fx-background-color: #bfbfbf"));
+        deleteBox.setOnMouseEntered(event -> deleteBox.setStyle("-fx-background-color: #bfbfbf"));
+        openBox.setOnMouseEntered(event -> openBox.setStyle("-fx-background-color: #bfbfbf"));
 
-        deleteBox.setOnMouseExited(event -> deleteLabel.setStyle("-fx-background-color: #737373"));
-        openBox.setOnMouseExited(event -> openLabel.setStyle("-fx-background-color: #737373"));
+        deleteBox.setOnMouseExited(event -> deleteBox.setStyle("-fx-background-color: #737373"));
+        openBox.setOnMouseExited(event -> openBox.setStyle("-fx-background-color: #737373"));
 
         deleteBox.setOnMouseClicked(event -> {
 
             selectedTile = recyclerView.getSelectionModel().getSelectedIndex();
-            System.out.println("Delete Tile : " + selectedTile);
 
             recyclerView.getItems().remove(selectedTile);
             cardList.remove(selectedTile);
@@ -184,7 +195,14 @@ public class StickyController implements Initializable {
             popoverMenu.hide();
 
             try {
-                initNewNote(cardList.get(selectedTile).getText(), selectedTile);
+                CardDetail card = cardList.get(selectedTile);
+                if(!(card.isOpen()) || true) {
+                    initNewNote(card.getText(), selectedTile);
+                    card.changeOpen(true);
+                }
+                else {
+                    System.out.println("Its already open");
+                }
             }
             catch (Exception ignored) { }
         });
@@ -207,10 +225,11 @@ public class StickyController implements Initializable {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
 
-        stage.setTitle("Sticky Note");
-        stage.show();
-
         stage.getIcons().add(new Image("/images/logo.png"));
+        stage.setTitle("Sticky Note");
+
+        Constants.currStage = stage;
+        stage.show();
     }
 
     class Adapter extends RecyclerView.Adapter<Card>
@@ -268,7 +287,7 @@ class Card extends RecyclerView.ViewHolder {
     @FXML public Label textArea;
     @FXML public Label date;
     @FXML public Pane colorPane;
-    @FXML public BorderPane cardBorderPane;
+    @FXML public BorderPane cardBorderPane, cardBorder;
 
     public Card(FXMLLoader loader) {
         super(loader);
