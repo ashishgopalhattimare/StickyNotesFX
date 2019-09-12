@@ -158,7 +158,7 @@ public class NoteController implements Initializable {
     {
         if(cardDetail != null)
         {
-            StickyController.s_recyclerView.getItems().remove(cardDetail);
+            StickyController.s_recyclerView.getItems().remove(cardDetail); 
         }
 
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
