@@ -57,9 +57,9 @@ public class StickyController implements Initializable {
         adapter = new Adapter();
         recyclerView.setAdapter(adapter);
 
-        cardList.add(new CardDetail("Surbhi", 0));
-        cardList.add(new CardDetail("Ashish", 2));
-        cardList.add(new CardDetail("Yogesh", 4));
+        cardList.add(new CardDetail("This is Note 1", 0));
+        cardList.add(new CardDetail("This is Note 2", 2));
+        cardList.add(new CardDetail("This is Note 3", 4));
 
         for(CardDetail x : cardList) recyclerView.getItems().add(x);
         PopUpOpen = false;
