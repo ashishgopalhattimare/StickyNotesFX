@@ -21,7 +21,7 @@
             <top>
                 <VBox prefHeight="115.0" prefWidth="310.0" BorderPane.alignment="CENTER">
                     <children>
-                        <GridPane>
+                        <GridPane prefHeight="35.0">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -30,7 +30,7 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <FlowPane prefHeight="20.0" prefWidth="309.0" style="-fx-background-color: #000;">
+                                <FlowPane alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="309.0" style="-fx-background-color: #000;">
                                     <children>
                               <BorderPane fx:id="addButton" prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: #000;">
                                  <center>
@@ -43,7 +43,7 @@
                               </BorderPane>
                                     </children>
                                 </FlowPane>
-                                <FlowPane alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #000;" GridPane.columnIndex="1">
+                                <FlowPane alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="200.0" style="-fx-background-color: #000;" GridPane.columnIndex="1">
                            <children>
                               <BorderPane fx:id="settingButton" prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: #000;">
                                  <center>

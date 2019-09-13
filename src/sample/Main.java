@@ -26,6 +26,7 @@ public class Main extends Application {
         Constants.WINDOW_HEIGHT = (int) window.getHeight();
         Constants.WINDOW_WIDTH = (int) window.getWidth();
 
+        FirebaseConfig.SetUpConnection();
     }
 
     public static void main(String[] args) {

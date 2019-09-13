@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 public class CardDetail
 {
+    private int color, imageCount;
     private String text, date;
-    private int color;
     private Card card;
 
     private boolean open;
@@ -15,6 +15,8 @@ public class CardDetail
     public CardDetail(String text, int color) {
         this.text = text; this.color = color;
         open = false;
+
+        this.imageCount = 0;
         setDateTime();
     }
 
@@ -36,8 +38,13 @@ public class CardDetail
 
     public void setDateTime() {
         dateTime = Constants.getDateTime();
-        date = dateTime.toString();
 
-//        date = dateTime.getDayOfMonth() + " " + dateTime.getMonth().toString().substring(0, 3);
+//        date = dateTime.toString();
+        date = dateTime.getDayOfMonth() + " " + Constants.MONTHS[dateTime.getMonthValue()-1];
+    }
+
+    public int getImageCount() { return imageCount; }
+    public void setImageCount(int factor) {
+        this.imageCount += factor;
     }
 }

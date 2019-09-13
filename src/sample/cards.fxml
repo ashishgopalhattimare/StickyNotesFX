@@ -5,17 +5,25 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="cardBorder" prefHeight="122.0" prefWidth="229.0" style="-fx-background-color: #000;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="cardBorder" prefHeight="120.0" prefWidth="230.0" style="-fx-background-color: #000;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <BorderPane fx:id="cardBorderPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <top>
-            <VBox prefHeight="25.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Pane fx:id="colorPane" prefHeight="6.0" prefWidth="200.0" style="-fx-background-color: #ffda00;" />
-                  <FlowPane alignment="TOP_RIGHT" prefHeight="20.0" prefWidth="196.0" style="-fx-background-color: #737373;">
+         <center>
+            <BorderPane fx:id="noteBorder" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #737373;" BorderPane.alignment="CENTER">
+               <center>
+                  <Label fx:id="textArea" alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="100.0" prefWidth="270.0" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER_LEFT">
+                     <font>
+                        <Font name="Candara" size="13.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" />
+                     </padding>
+                  </Label>
+               </center>
+               <top>
+                  <FlowPane alignment="TOP_RIGHT" prefHeight="20.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
                         <Label fx:id="date" style="-fx-background-color: #737373;" text="9 Sep" textFill="#ffda00">
                            <FlowPane.margin>
@@ -23,30 +31,16 @@
                            </FlowPane.margin>
                         </Label>
                      </children>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
                      <padding>
                         <Insets right="3.0" />
                      </padding>
                   </FlowPane>
-               </children>
-            </VBox>
-         </top>
-         <center>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #737373;" BorderPane.alignment="CENTER">
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" />
-               </padding>
-               <center>
-                  <Label fx:id="textArea" alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="100.0" prefWidth="268.0" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER_LEFT">
-                     <font>
-                        <Font name="Candara" size="13.0" />
-                     </font>
-                  </Label>
-               </center>
+               </top>
             </BorderPane>
          </center>
+         <top>
+            <Pane fx:id="colorPane" prefHeight="6.0" prefWidth="200.0" style="-fx-background-color: #ffda00;" BorderPane.alignment="CENTER" />
+         </top>
       </BorderPane>
    </center>
    <bottom>

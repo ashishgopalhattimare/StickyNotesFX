@@ -11,7 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -31,6 +30,9 @@ public class SplashController implements Initializable {
         fadeOut.play();
         fadeOut.setOnFinished(event -> {
             try {
+
+                generateUserDetails();
+
                 Stage primaryStage = new Stage();
                 Parent root = FXMLLoader.load(getClass().getResource("stickyframe.fxml"));
 
@@ -55,5 +57,20 @@ public class SplashController implements Initializable {
                 stage.close();
             }
         });
+    }
+
+    public void generateUserDetails() {
+//        Constants.user = new UserDetail(
+//                "ashishhattimare",
+//                "Ashish Gopal Hattimare",
+//                "ashishgopalhattimare@gmail.com",
+//                "password");
+
+        Constants.user = new UserDetail(
+                "nishthapathak1997",
+                "Nishtha Pathak",
+                "nishtha1997@gmail.com", UserDetail.passwordHash("ihateyou"));
+
+        FirebaseConfig.AddUser();
     }
 }

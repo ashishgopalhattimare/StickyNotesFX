@@ -1,14 +1,20 @@
 package sample;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXScrollPane;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Orientation;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -16,6 +22,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -25,9 +33,12 @@ import java.util.ResourceBundle;
 
 public class NoteController implements Initializable {
 
-    @FXML private JFXTextArea noteArea;
-    @FXML private BorderPane addButton, ellipseButton, deleteButton, progressBar;
     @FXML private JFXButton color1, color2, color3, color4, color5, color6, color7;
+    @FXML private BorderPane addButton, ellipseButton, deleteButton, progressBar;
+    @FXML private JFXTextArea noteArea;
+    @FXML private VBox scrollBox;
+    @FXML
+    private JFXListView<Pane> imageView;
 
     @FXML private FlowPane leftPane, rightPane;
     @FXML private Pane midPane, separator;
@@ -136,8 +147,16 @@ public class NoteController implements Initializable {
             }
         });
 
+        imageView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Pane>() {
+            @Override
+            public void changed(ObservableValue<? extends Pane> observable, Pane oldValue, Pane newValue) {
+
+                System.out.println(imageView.getSelectionModel().getSelectedIndex());
+            }
+        });
+
         initialColor = Constants.randomColor;
-        fillTitleBarColor(Constants.hexColor[initialColor]);
+        fillTitleBarColor(Constants.HEXCOLOR[initialColor]);
 
         cardDetail = Constants.card;
         Constants.card = null;
@@ -154,7 +173,7 @@ public class NoteController implements Initializable {
 
         for(int i = 0; i < Constants.LENGTH; i++) {
             if(event.getSource() == arrColor[i]) {
-                fillTitleBarColor(Constants.hexColor[i]);
+                fillTitleBarColor(Constants.HEXCOLOR[i]);
             }
         }
     }
@@ -175,7 +194,7 @@ public class NoteController implements Initializable {
         fadeArray[index].setFromValue(1);
         fadeArray[index].setToValue(0);
         fadeArray[index].play();
-        fadeArray[index].setOnFinished(event -> disappearColors(fadeArray, index+1));
+        fadeArray[index].setOnFinished(event -> disappearColors(fadeArray, index + 1));
     }
 
     public void setNoteArea(String text) {
@@ -186,7 +205,6 @@ public class NoteController implements Initializable {
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         stage.setY(event.getScreenY() - note_y);
         stage.setX(event.getScreenX() - note_x);
-
     }
 
     @FXML public void mousePressed(MouseEvent event) {
@@ -194,6 +212,9 @@ public class NoteController implements Initializable {
         note_y = event.getSceneY();
     }
 
+    private void resizeImageView(int size) {
+        scrollBox.setPrefHeight(size); imageView.setPrefHeight(size-1);
+    }
     private void deleteNote(MouseEvent event)
     {
         if(cardDetail != null)

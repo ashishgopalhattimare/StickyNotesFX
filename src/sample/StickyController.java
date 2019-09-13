@@ -49,6 +49,7 @@ public class StickyController implements Initializable {
     private int selectedTile;
 
     public static ArrayList<CardDetail> cardList = new ArrayList<>();
+    public static long prevTime, currTime;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -134,6 +135,8 @@ public class StickyController implements Initializable {
 
         clearImageVisible = false;
         clearImage.setOpacity(0);
+
+        prevTime = 0;
     }
 
     @FXML void keyReleased(KeyEvent event)
@@ -252,21 +255,46 @@ public class StickyController implements Initializable {
             card.textArea.setText(cd.getText());
             card.date.setText(cd.getDate());
 
-            card.colorPane.setStyle("-fx-background-color: " + Constants.hexColor[cd.getColor()]);
-            card.date.setStyle("-fx-text-fill: " + Constants.hexColor[cd.getColor()]);
+            card.colorPane.setStyle("-fx-background-color: " + Constants.HEXCOLOR[cd.getColor()]);
+            card.date.setStyle("-fx-text-fill: " + Constants.HEXCOLOR[cd.getColor()]);
 
             card.cardBorderPane.setOnMouseExited(event -> {
                 if(!PopUpOpen) {
-                    card.date.setStyle("-fx-text-fill: " +Constants.hexColor[cd.getColor()]);
+                    card.date.setStyle("-fx-text-fill: " +Constants.HEXCOLOR[cd.getColor()]);
                     card.date.setText(cd.getDate());
+
+                    card.noteBorder.setStyle("-fx-background-color:#737373");
                 }
             });
             card.cardBorderPane.setOnMouseEntered(event -> {
                 card.date.setStyle("-fx-text-fill: #bfbfbf");
                 card.date.setText("•••");
+
+                card.noteBorder.setStyle("-fx-background-color:#4d4d4d");
             });
             card.cardBorderPane.setOnMouseClicked(event -> {
                 PopUpOpen = false;
+
+                card.noteBorder.setStyle("-fx-background-color:#4d4d4d");
+
+                currTime = System.currentTimeMillis();
+                if(Math.abs(currTime-prevTime) <= 500) { // open this tile
+
+                    selectedTile = recyclerView.getSelectionModel().getSelectedIndex();
+                    popoverMenu.hide();
+
+                    try {
+                        if(!(cd.isOpen()) || true) {
+                            initNewNote(cd.getText(), selectedTile);
+                            cd.changeOpen(true);
+                        }
+                        else {
+                            System.out.println("Its already open");
+                        }
+                    }
+                    catch (Exception ignored) { }
+                }
+                prevTime = currTime;
             });
 
             card.date.setOnMouseExited(event -> { card.date.setStyle("-fx-text-fill: #bfbfbf"); });
@@ -278,6 +306,7 @@ public class StickyController implements Initializable {
                 popoverMenu.setAnimated(true);
                 PopUpOpen = true;
             });
+
         }
     }
 }
@@ -287,7 +316,7 @@ class Card extends RecyclerView.ViewHolder {
     @FXML public Label textArea;
     @FXML public Label date;
     @FXML public Pane colorPane;
-    @FXML public BorderPane cardBorderPane, cardBorder;
+    @FXML public BorderPane cardBorderPane, cardBorder, noteBorder;
 
     public Card(FXMLLoader loader) {
         super(loader);
