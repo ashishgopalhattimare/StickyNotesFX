@@ -45,7 +45,7 @@
                      <center>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                            <image>
-                              <Image url="@../images/addBlack.png" />
+                              <Image url="@../../images/addBlack.png" />
                            </image>
                         </ImageView>
                      </center>
@@ -54,7 +54,7 @@
                      <center>
                         <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                            <image>
-                              <Image url="@../images/garbage.png" />
+                              <Image url="@../../images/garbage.png" />
                            </image>
                         </ImageView>
                      </center>
@@ -85,7 +85,7 @@
                      <center>
                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                            <image>
-                              <Image url="@../images/ellipsis.png" />
+                              <Image url="@../../images/ellipsis.png" />
                            </image>
                         </ImageView>
                      </center>

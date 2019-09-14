@@ -147,11 +147,11 @@
             <FlowPane alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="200.0" />
             <FlowPane alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="200.0" GridPane.columnIndex="1">
                <children>
-                  <BorderPane prefHeight="35.0" prefWidth="35.0">
+                  <BorderPane fx:id="closeButton" prefHeight="35.0" prefWidth="35.0">
                      <center>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                            <image>
-                              <Image url="@../images/close.png" />
+                              <Image url="@../../images/close.png" />
                            </image>
                         </ImageView>
                      </center>

@@ -14,12 +14,12 @@
          <children>
             <ImageView fitHeight="165.0" fitWidth="280.0" pickOnBounds="true">
                <image>
-                  <Image url="@../images/background.png" />
+                  <Image url="@../../images/background.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="72.0" fitWidth="71.0" layoutX="103.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/logo.png" />
+                  <Image url="@../../images/logo.png" />
                </image>
             </ImageView>
             <Label layoutX="51.0" layoutY="115.0" text="Loading Sticky Notes ..." textFill="WHITE">

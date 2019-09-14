@@ -1,7 +1,7 @@
 package sample;
 
-import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import javafx.animation.RotateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,15 +9,17 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.controlsfx.control.PopOver;
 import org.kairos.layouts.RecyclerView;
 
@@ -40,16 +42,17 @@ public class StickyController implements Initializable {
     public static RecyclerView<CardDetail> s_recyclerView = null;
 
     @FXML private RecyclerView<CardDetail> recyclerView;
+    @FXML private BorderPane minimizeButton, settingButton, frontPane, backPane, syncButton;
     @FXML private BorderPane clearButton, searchButton, addButton, closeButton;
-    @FXML private BorderPane minimizeButton, settingButton;
     @FXML private JFXTextField searchField;
-    @FXML private ImageView clearImage;
+    @FXML private ImageView clearImage, syncImage;
 
     private boolean clearImageVisible;
     private int selectedTile;
 
     public static ArrayList<CardDetail> cardList = new ArrayList<>();
     public static long prevTime, currTime;
+    private boolean displayStickNote;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -75,6 +78,40 @@ public class StickyController implements Initializable {
         searchButton.setOnMouseClicked(event -> {
 
             searchButton.setStyle("-fx-background-color:#595959");
+        });
+
+        syncButton.setOnMouseReleased(event -> syncButton.setStyle("-fx-background-color:#737373"));
+        syncButton.setOnMousePressed(event -> syncButton.setStyle("-fx-background-color:#595959"));
+        syncButton.setOnMouseEntered(event -> syncButton.setStyle("-fx-background-color:#595959"));
+        syncButton.setOnMouseExited(event -> syncButton.setStyle("-fx-background-color:#737373"));
+        syncButton.setOnMouseClicked(event -> {
+            RotateTransition rotate = new RotateTransition();
+            rotate.setAxis(Rotate.Z_AXIS);
+            rotate.setByAngle(360);
+            rotate.setCycleCount(3);
+            rotate.setDuration(Duration.millis(3000));
+
+            rotate.setNode(syncImage);
+            rotate.play();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    int counter = 2;
+                    try {
+                        for(int i = 1; i <= 2; i++) {
+                            Thread.sleep(1000);
+                        }
+                        rotate.stop();
+                        System.out.println("stopped before");
+                    }
+                    catch (Exception e) {}
+                }
+            }).start();
+
+            rotate.setOnFinished(e -> {
+                System.out.println("done sync");
+            });
         });
 
         addButton.setOnMouseEntered(event -> addButton.setStyle("-fx-background-color:#595959"));
@@ -107,11 +144,7 @@ public class StickyController implements Initializable {
         settingButton.setOnMouseEntered(event -> settingButton.setStyle("-fx-background-color:#595959"));
         settingButton.setOnMouseReleased(event -> settingButton.setStyle("-fx-background-color:#000"));
         settingButton.setOnMouseExited(event -> settingButton.setStyle("-fx-background-color:#000"));
-        settingButton.setOnMouseClicked(event -> {
-            System.out.println("Setting Open");
-
-            settingButton.setStyle("-fx-background-color:#595959");
-        });
+        settingButton.setOnMouseClicked(this::settingHandler);
 
         clearButton.setOnMouseReleased(event -> {
             if(clearImageVisible) { clearButton.setStyle("-fx-background-color:#737373"); }
@@ -133,10 +166,32 @@ public class StickyController implements Initializable {
             }
         });
 
+        try {
+            BorderPane x = FXMLLoader.load(getClass().getResource("views/userdetail.fxml"));
+            backPane.setCenter(x);
+        }
+        catch (Exception e) {}
+
         clearImageVisible = false;
         clearImage.setOpacity(0);
 
         prevTime = 0;
+
+        displayStickNote = true;
+    }
+
+    private void settingHandler(MouseEvent event) {
+
+        displayStickNote = !(displayStickNote);
+
+        if(displayStickNote == true) {
+            frontPane.setOpacity(1); frontPane.setDisable(false);
+            backPane.setOpacity(0); backPane.setDisable(true);
+        }
+        else {
+            frontPane.setOpacity(0); frontPane.setDisable(true);
+            backPane.setOpacity(1); backPane.setDisable(true);
+        }
     }
 
     @FXML void keyReleased(KeyEvent event)
@@ -219,7 +274,7 @@ public class StickyController implements Initializable {
             Constants.card = cardList.get(index);
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("note.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/note.fxml"));
         Parent root = loader.load();
 
         NoteController controller = loader.getController();
@@ -240,7 +295,7 @@ public class StickyController implements Initializable {
         @Override
         public Card onCreateViewHolder(FXMLLoader fxmlLoader) {
 
-            fxmlLoader.setLocation(getClass().getResource("cards.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("views/cards.fxml"));
             Card card = new Card(fxmlLoader);
 
             return card;

@@ -2,19 +2,14 @@ package sample;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXScrollPane;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.animation.FadeTransition;
-import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Orientation;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -23,9 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -48,8 +41,8 @@ public class NoteController implements Initializable {
 
     private boolean colorDisplay, fadeInProcess;
     private double note_x, note_y;
-    private int initialColor;
     private CardDetail cardDetail;
+    private int initialColor;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -63,7 +56,6 @@ public class NoteController implements Initializable {
         }
 
         colorDisplay = false; fadeInProcess = false;
-        // progressBar.setOpacity(0);
         separator.setOpacity(0);
 
         addButton.setOnMouseEntered(event -> addButton.setStyle("-fx-background-color:" + Constants.selectColor));
@@ -72,14 +64,15 @@ public class NoteController implements Initializable {
         addButton.setOnMouseClicked(event -> {
             try {
                 Stage stage = new Stage();
-                stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("note.fxml"))));
+                stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("views/note.fxml"))));
                 stage.getIcons().add(new Image("/images/logo.png"));
                 stage.setTitle("Sticky Note");
 
                 addButton.setStyle("-fx-background-color:" + Constants.selectColor);
-                Constants.randomColor = (int) (Math.random() * Constants.LENGTH);
 
+                Constants.randomColor = (int) (Math.random() * Constants.LENGTH);
                 Constants.currStage = stage;
+
                 stage.show();
             }
             catch (Exception e) {}
@@ -169,11 +162,16 @@ public class NoteController implements Initializable {
     }
     
     public void colorHandler(ActionEvent event) {
-        if(fadeInProcess) return;
+
+        if(fadeInProcess && cardDetail == null) return;
 
         for(int i = 0; i < Constants.LENGTH; i++) {
             if(event.getSource() == arrColor[i]) {
                 fillTitleBarColor(Constants.HEXCOLOR[i]);
+                cardDetail.getCard().colorPane.setStyle("-fx-background-color: " + Constants.HEXCOLOR[i]);
+                cardDetail.getCard().date.setStyle("-fx-text-fill: " + Constants.HEXCOLOR[i]);
+
+                cardDetail.setColor(i);
             }
         }
     }

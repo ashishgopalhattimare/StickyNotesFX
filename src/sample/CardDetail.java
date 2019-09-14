@@ -29,7 +29,11 @@ public class CardDetail
 
     public String getText() { return text; }
     public String getDate() { return date; }
+
     public int getColor()   { return color;}
+    public void setColor(int color) {
+        this.color = color;
+    }
 
     public void setCard(Card card) {
         this.card = card;

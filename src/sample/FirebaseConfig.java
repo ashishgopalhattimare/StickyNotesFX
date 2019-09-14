@@ -30,13 +30,17 @@ public class FirebaseConfig {
                     UserDetail userDetail = user.getValue(UserDetail.class);
 //
                     if(userDetail.getUsername().equals(requestUser.getUsername())) {
+
                         System.out.println("Already Exists");
+                         new SplashController().generateStickyFrame();
                         return;
                     }
                 }
 
                 firebase.child("Users").push().setValue(requestUser);
                 System.out.println("Newly Added");
+
+                // new SplashController().generateStickyFrame();
             }
 
             @Override

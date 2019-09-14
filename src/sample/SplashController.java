@@ -30,24 +30,8 @@ public class SplashController implements Initializable {
         fadeOut.play();
         fadeOut.setOnFinished(event -> {
             try {
-
                 generateUserDetails();
-
-                Stage primaryStage = new Stage();
-                Parent root = FXMLLoader.load(getClass().getResource("stickyframe.fxml"));
-
-                primaryStage.initStyle(StageStyle.UNDECORATED);
-                primaryStage.getIcons().add(new Image("/images/logo.png"));
-                primaryStage.setScene(new Scene(root));
-
-                primaryStage.setX(Constants.WINDOW_WIDTH-350);
-                primaryStage.setY(0);
-
-                primaryStage.setOnCloseRequest(e -> {
-                    System.out.println("exs");
-                });
-
-                primaryStage.show();
+                generateStickyFrame();
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -59,6 +43,27 @@ public class SplashController implements Initializable {
         });
     }
 
+    public void generateStickyFrame() {
+        try {
+            Stage primaryStage = new Stage();
+            Parent root = FXMLLoader.load(getClass().getResource("views/stickyframe.fxml"));
+
+            primaryStage.initStyle(StageStyle.UNDECORATED);
+            primaryStage.getIcons().add(new Image("/images/logo.png"));
+            primaryStage.setScene(new Scene(root));
+
+            primaryStage.setX(Constants.WINDOW_WIDTH-350);
+            primaryStage.setY(0);
+
+            primaryStage.setOnCloseRequest(e -> {
+                System.out.println("exs");
+            });
+
+            primaryStage.show();
+        }
+        catch (Exception e) {}
+    }
+
     public void generateUserDetails() {
 //        Constants.user = new UserDetail(
 //                "ashishhattimare",
@@ -67,7 +72,7 @@ public class SplashController implements Initializable {
 //                "password");
 
         Constants.user = new UserDetail(
-                "nishthapathak1997",
+                "nishthapathak1998",
                 "Nishtha Pathak",
                 "nishtha1997@gmail.com", UserDetail.passwordHash("ihateyou"));
 
