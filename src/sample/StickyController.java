@@ -54,6 +54,9 @@ public class StickyController implements Initializable {
     public static long prevTime, currTime;
     private boolean displayStickNote;
 
+    private static void handle(MouseEvent event) {
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -80,45 +83,18 @@ public class StickyController implements Initializable {
             searchButton.setStyle("-fx-background-color:#595959");
         });
 
-        syncButton.setOnMouseReleased(event -> syncButton.setStyle("-fx-background-color:#737373"));
-        syncButton.setOnMousePressed(event -> syncButton.setStyle("-fx-background-color:#595959"));
         syncButton.setOnMouseEntered(event -> syncButton.setStyle("-fx-background-color:#595959"));
-        syncButton.setOnMouseExited(event -> syncButton.setStyle("-fx-background-color:#737373"));
-        syncButton.setOnMouseClicked(event -> {
-            RotateTransition rotate = new RotateTransition();
-            rotate.setAxis(Rotate.Z_AXIS);
-            rotate.setByAngle(360);
-            rotate.setCycleCount(3);
-            rotate.setDuration(Duration.millis(3000));
-
-            rotate.setNode(syncImage);
-            rotate.play();
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    int counter = 2;
-                    try {
-                        for(int i = 1; i <= 2; i++) {
-                            Thread.sleep(1000);
-                        }
-                        rotate.stop();
-                        System.out.println("stopped before");
-                    }
-                    catch (Exception e) {}
-                }
-            }).start();
-
-            rotate.setOnFinished(e -> {
-                System.out.println("done sync");
-            });
-        });
+        syncButton.setOnMouseReleased(event -> syncButton.setStyle("-fx-background-color:#000"));
+        syncButton.setOnMouseExited(event -> syncButton.setStyle("-fx-background-color:#000"));
+        syncButton.setOnMouseClicked(this::syncHandler);
 
         addButton.setOnMouseEntered(event -> addButton.setStyle("-fx-background-color:#595959"));
         addButton.setOnMouseReleased(event -> addButton.setStyle("-fx-background-color:#000"));
         addButton.setOnMouseExited(event -> addButton.setStyle("-fx-background-color:#000"));
         addButton.setOnMouseClicked(event -> {
-            try { initNewNote("", -1); addButton.setStyle("-fx-background-color:#595959"); }
+            try { addButton.setStyle("-fx-background-color:#595959");
+                initNewNote("", -1);
+            }
             catch (Exception e) { e.printStackTrace(); }
         });
 
@@ -144,7 +120,7 @@ public class StickyController implements Initializable {
         settingButton.setOnMouseEntered(event -> settingButton.setStyle("-fx-background-color:#595959"));
         settingButton.setOnMouseReleased(event -> settingButton.setStyle("-fx-background-color:#000"));
         settingButton.setOnMouseExited(event -> settingButton.setStyle("-fx-background-color:#000"));
-        settingButton.setOnMouseClicked(this::settingHandler);
+        //settingButton.setOnMouseClicked(this::settingHandler);
 
         clearButton.setOnMouseReleased(event -> {
             if(clearImageVisible) { clearButton.setStyle("-fx-background-color:#737373"); }
@@ -178,6 +154,31 @@ public class StickyController implements Initializable {
         prevTime = 0;
 
         displayStickNote = true;
+    }
+
+    private void syncHandler(MouseEvent event)
+    {
+        syncButton.setStyle("-fx-background-color:#000");
+        new Thread(() -> {
+            RotateTransition rotate = new RotateTransition();
+            rotate.setByAngle(360); rotate.setCycleCount(10);
+            rotate.setDuration(Duration.millis(1000));
+            rotate.setAxis(Rotate.Z_AXIS);
+
+            rotate.setNode(syncImage);
+            rotate.play();
+
+            new Thread(() -> {
+                try { for(int i = 1; i <= 100; i++) {
+                    Thread.sleep(1000);
+                }
+                    rotate.stop(); System.out.println("stopped before");
+                }
+                catch (Exception e) {}
+            }).start();
+
+            rotate.setOnFinished(e -> System.out.println("done sync"));
+        }).start();
     }
 
     private void settingHandler(MouseEvent event) {
