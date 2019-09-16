@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 
 public class UserDetail
 {
+
     private String username, fullName;
     private String email;
     private String password;

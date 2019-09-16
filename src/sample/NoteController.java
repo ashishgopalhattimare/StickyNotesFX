@@ -107,7 +107,6 @@ public class NoteController implements Initializable {
 
                 if(noteArea.getText().length() > 0) { // if the note is not empty
 
-                    cardDetail.changeOpen(true);
                     cardDetail.setDateTime();
 
                     if(StickyController.s_recyclerView.getItems().get(0) != cardDetail) {
@@ -132,7 +131,6 @@ public class NoteController implements Initializable {
                 // note does not exist, and is not empty -> place it at the top of the Sticky List
                 if(noteArea.getText().length() > 0) {
                     cardDetail = new CardDetail(noteArea.getText(), initialColor);
-                    cardDetail.changeOpen(true);
 
                     StickyController.s_recyclerView.getItems().add(0, cardDetail);
                     StickyController.cardList.add(0, cardDetail);
@@ -219,6 +217,7 @@ public class NoteController implements Initializable {
         {
             StickyController.s_recyclerView.getItems().remove(cardDetail);
             StickyController.cardList.remove(cardDetail);
+
         }
 
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();

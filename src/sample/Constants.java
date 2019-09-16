@@ -21,6 +21,7 @@ public class Constants {
     public static Stage currStage;
 
     public static UserDetail user;
+    public static boolean mainWindowClosed = false;
 
     public static final String FIREBASE_LINK = "https://stickynotes-efe5c.firebaseio.com/";
 

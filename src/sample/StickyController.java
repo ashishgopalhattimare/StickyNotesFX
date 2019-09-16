@@ -255,13 +255,7 @@ public class StickyController implements Initializable {
 
             try {
                 CardDetail card = cardList.get(selectedTile);
-                if(!(card.isOpen()) || true) {
-                    initNewNote(card.getText(), selectedTile);
-                    card.changeOpen(true);
-                }
-                else {
-                    System.out.println("Its already open");
-                }
+                initNewNote(card.getText(), selectedTile);
             }
             catch (Exception ignored) { }
         });
@@ -340,13 +334,7 @@ public class StickyController implements Initializable {
                     popoverMenu.hide();
 
                     try {
-                        if(!(cd.isOpen()) || true) {
-                            initNewNote(cd.getText(), selectedTile);
-                            cd.changeOpen(true);
-                        }
-                        else {
-                            System.out.println("Its already open");
-                        }
+                        initNewNote(cd.getText(), selectedTile);
                     }
                     catch (Exception ignored) { }
                 }
