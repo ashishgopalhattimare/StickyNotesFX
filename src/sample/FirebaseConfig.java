@@ -87,6 +87,7 @@ public class FirebaseConfig {
                         f.cardf1.add(card.getColor());
                         f.cardf2.add(card.getText());
                         f.cardf3.add(card.getDate());
+                        f.cardf4.add(card.isFavourite());
                     }
                     firebase.child("Users").push().setValue(f);
                 }

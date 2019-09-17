@@ -11,13 +11,14 @@ public class FirebaseUserDetail {
 
     public List<Integer> cardf1;
     public List<String> cardf2, cardf3;
+    public List<Boolean> cardf4;
 
     public FirebaseUserDetail(String username, String fullName, String email, String password) {
         this.username = username; this.fullName = fullName;
         this.email = email; this.password = password;
 
         cardf1 = new ArrayList<>(); cardf2 = new ArrayList<>();
-        cardf3 = new ArrayList<>();
+        cardf3 = new ArrayList<>(); cardf4 = new ArrayList<>();
 
         keepShow = false;
     }

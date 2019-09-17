@@ -3,6 +3,7 @@ package sample;
 import com.jfoenix.controls.JFXTextField;
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import javafx.animation.RotateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -106,6 +107,10 @@ public class StickyController implements Initializable
 
             Constants.mainWindowClosed = true;
             FirebaseConfig.syncUserData();
+
+            if(Constants.mainWindowClosed && Constants.openedNotes == 0) {
+                System.exit(0);
+            }
 
             Stage stage = (Stage) closeButton.getScene().getWindow();
             stage.close();
@@ -275,9 +280,18 @@ public class StickyController implements Initializable
         stage.setTitle("Sticky Note");
 
         Constants.currStage = stage;
+        Constants.openedNotes++;
+
         stage.show();
 
-        stage.setOnCloseRequest(e -> FirebaseConfig.syncUserData());
+        stage.setOnCloseRequest(e -> {
+
+            FirebaseConfig.syncUserData();
+            Constants.openedNotes--;
+            if(Constants.mainWindowClosed && Constants.openedNotes == 0) {
+                System.exit(0);
+            }
+        });
     }
 
     class Adapter extends RecyclerView.Adapter<Card>

@@ -7,12 +7,13 @@ public class CardDetail
     private int color;
     private String text, date;
     private Card card;
+    private boolean favourite;
 
     private LocalDateTime dateTime;
 
     public CardDetail(String text, int color) {
         this.text = text; this.color = color;
-
+        favourite = false;
         setDateTime();
     }
 
@@ -30,6 +31,11 @@ public class CardDetail
     public int getColor()   { return color;}
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public boolean isFavourite() { return favourite; }
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
     }
 
     public void setCard(Card card) {

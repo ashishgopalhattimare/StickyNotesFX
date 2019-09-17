@@ -4,7 +4,6 @@
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -59,13 +58,17 @@
                         </ImageView>
                      </center>
                   </BorderPane>
-                  <BorderPane fx:id="progressBar" opacity="0.0" prefHeight="35.0" prefWidth="35.0">
+                  <BorderPane fx:id="favouriteButton" prefHeight="35.0" prefWidth="35.0">
                      <center>
-                        <ProgressIndicator prefHeight="18.0" prefWidth="20.0" style="-fx-accent: #000;" BorderPane.alignment="CENTER" />
+                        <ImageView fx:id="favouriteImage" fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                           <image>
+                              <Image url="@../../images/notfavourite.png" />
+                           </image>
+                           <BorderPane.margin>
+                              <Insets bottom="3.0" />
+                           </BorderPane.margin>
+                        </ImageView>
                      </center>
-                     <padding>
-                        <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
-                     </padding>
                   </BorderPane>
                </children>
             </FlowPane>
@@ -74,8 +77,8 @@
             <FlowPane fx:id="rightPane" alignment="TOP_RIGHT" prefHeight="35.0" prefWidth="287.0" style="-fx-background-color: #fff;" BorderPane.alignment="CENTER">
                <children>
                   <Pane fx:id="separator" prefHeight="35.0" prefWidth="2.0" style="-fx-background-color: #fff;" />
-                  <JFXButton fx:id="color1" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #ffd11a;" text=" " />
-                  <JFXButton fx:id="color2" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #00cc00;" text=" " />
+                  <JFXButton fx:id="color1" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #99cc00;" text=" " />
+                  <JFXButton fx:id="color2" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #4775d1;" text=" " />
                   <JFXButton fx:id="color3" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #ff80ff;" text=" " />
                   <JFXButton fx:id="color4" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #d966ff;" text=" " />
                   <JFXButton fx:id="color5" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 0; -fx-border-radius: 0; -fx-background-color: #4db8ff;" text=" " />

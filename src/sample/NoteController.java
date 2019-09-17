@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -27,11 +29,11 @@ import java.util.ResourceBundle;
 public class NoteController implements Initializable {
 
     @FXML private JFXButton color1, color2, color3, color4, color5, color6, color7;
-    @FXML private BorderPane addButton, ellipseButton, deleteButton, progressBar, notePane;
+    @FXML private BorderPane addButton, ellipseButton, deleteButton, favouriteButton, notePane;
     @FXML private JFXTextArea noteArea;
     @FXML private VBox scrollBox;
-    @FXML
-    private JFXListView<Pane> imageView;
+    @FXML private JFXListView<Pane> imageView;
+    @FXML private ImageView favouriteImage;
 
     @FXML private FlowPane leftPane, rightPane;
     @FXML private Pane midPane, separator;
@@ -42,7 +44,7 @@ public class NoteController implements Initializable {
     private boolean colorDisplay, fadeInProcess;
     private double note_x, note_y;
     private CardDetail cardDetail;
-    private int initialColor;
+    private int cardColor;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -72,12 +74,16 @@ public class NoteController implements Initializable {
 
                 Constants.randomColor = (int) (Math.random() * Constants.LENGTH);
                 Constants.currStage = stage;
+                Constants.openedNotes++;
 
                 stage.show();
 
                 stage.setOnCloseRequest(e -> {
-                    if(Constants.mainWindowClosed) { FirebaseConfig.syncUserData(); }
-                    else FirebaseConfig.syncUserData();
+                    FirebaseConfig.syncUserData();
+                    Constants.openedNotes--;
+                    if(Constants.mainWindowClosed && Constants.openedNotes == 0) {
+                        System.exit(0);
+                    }
                 });
             }
             catch (Exception e) {}
@@ -87,6 +93,18 @@ public class NoteController implements Initializable {
         deleteButton.setOnMouseReleased(event -> deleteButton.setStyle(""));
         deleteButton.setOnMouseExited(event -> deleteButton.setStyle(""));
         deleteButton.setOnMouseClicked(this::deleteNote);
+
+        favouriteButton.setOnMouseEntered(event -> favouriteButton.setStyle("-fx-background-color:" + Constants.selectColor));
+        favouriteButton.setOnMouseReleased(event -> favouriteButton.setStyle(""));
+        favouriteButton.setOnMouseExited(event -> favouriteButton.setStyle(""));
+        favouriteButton.setOnMouseClicked(event -> {
+            if(cardDetail != null) {
+                cardDetail.setFavourite(!cardDetail.isFavourite());
+
+                if(cardDetail.isFavourite()) favouriteImage.setImage(new Image("/images/isfavourite.png"));
+                else favouriteImage.setImage(new Image("/images/notfavourite.png"));
+            }
+        });
 
         ellipseButton.setOnMouseEntered(event -> ellipseButton.setStyle("-fx-background-color:" + Constants.selectColor));
         ellipseButton.setOnMouseReleased(event -> ellipseButton.setStyle(""));
@@ -135,7 +153,7 @@ public class NoteController implements Initializable {
             else {
                 // note does not exist, and is not empty -> place it at the top of the Sticky List
                 if(noteArea.getText().length() > 0) {
-                    cardDetail = new CardDetail(noteArea.getText(), initialColor);
+                    cardDetail = new CardDetail(noteArea.getText(), cardColor);
 
                     StickyController.s_recyclerView.getItems().add(0, cardDetail);
                     StickyController.cardList.add(0, cardDetail);
@@ -151,8 +169,11 @@ public class NoteController implements Initializable {
             }
         });
 
-        initialColor = Constants.randomColor;
-        fillTitleBarColor(Constants.HEXCOLOR[initialColor]);
+        cardColor = Constants.randomColor;
+        fillTitleBarColor(Constants.HEXCOLOR[cardColor]);
+
+//        if(cardDetail.isFavourite()) favouriteImage.setImage(new Image("/images/isfavourite.png"));
+//        else favouriteImage.setImage(new Image("/images/notfavourite.png"));
 
         cardDetail = Constants.card;
         Constants.card = null;
@@ -170,11 +191,16 @@ public class NoteController implements Initializable {
 
         for(int i = 0; i < Constants.LENGTH; i++) {
             if(event.getSource() == arrColor[i]) {
-                fillTitleBarColor(Constants.HEXCOLOR[i]);
-                cardDetail.getCard().colorPane.setStyle("-fx-background-color: " + Constants.HEXCOLOR[i]);
-                cardDetail.getCard().date.setStyle("-fx-text-fill: " + Constants.HEXCOLOR[i]);
+                cardColor = i;
 
-                cardDetail.setColor(i);
+                fillTitleBarColor(Constants.HEXCOLOR[cardColor = i]);
+                try {
+                    cardDetail.getCard().colorPane.setStyle("-fx-background-color: " + Constants.HEXCOLOR[cardColor]);
+                    cardDetail.getCard().date.setStyle("-fx-text-fill: " + Constants.HEXCOLOR[cardColor]);
+                    cardDetail.setColor(cardColor);
+                }
+                catch (Exception e) {}
+                break;
             }
         }
     }
@@ -213,9 +239,6 @@ public class NoteController implements Initializable {
         note_y = event.getSceneY();
     }
 
-    private void resizeImageView(int size) {
-        scrollBox.setPrefHeight(size); imageView.setPrefHeight(size-1);
-    }
     private void deleteNote(MouseEvent event)
     {
         if(cardDetail != null)
@@ -224,8 +247,11 @@ public class NoteController implements Initializable {
             StickyController.cardList.remove(cardDetail);
         }
 
-        if(Constants.mainWindowClosed) { FirebaseConfig.syncUserData(); }
-        else { FirebaseConfig.syncUserData(); }
+        FirebaseConfig.syncUserData();
+        Constants.openedNotes--;
+        if(Constants.mainWindowClosed && Constants.openedNotes == 0) {
+            System.exit(0);
+        }
 
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         stage.close();
