@@ -29,32 +29,29 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class StickyController implements Initializable {
+public class StickyController implements Initializable
+{
+    private BorderPane openBorder, deleteBorder;
+    private ImageView openImage, deleteImage;
+    private Label openLabel, deleteLabel;
+    private HBox openBox, deleteBox;
+    private PopOver popoverMenu;
+    private Adapter adapter;
 
     private static boolean PopUpOpen;
 
-    private PopOver popoverMenu;
-    private HBox openBox, deleteBox;
-    private Label openLabel, deleteLabel;
-    private ImageView openImage, deleteImage;
-    private BorderPane openBorder, deleteBorder;
-
-    private Adapter adapter;
-
-    public static RecyclerView<CardDetail> s_recyclerView = null;
-
-    @FXML private RecyclerView<CardDetail> recyclerView;
-    @FXML private BorderPane minimizeButton, settingButton, syncButton, stickyPane;
+    @FXML private BorderPane minimizeButton, settingButton, syncButton, stickyPane, pinButton;
     @FXML private BorderPane clearButton, searchButton, addButton, closeButton;
+    @FXML private ImageView clearImage, syncImage, pinImage;
+    @FXML private RecyclerView<CardDetail> recyclerView;
     @FXML private JFXTextField searchField;
-    @FXML private ImageView clearImage, syncImage;
 
     private boolean clearImageVisible;
     private int selectedTile;
 
     public static ArrayList<CardDetail> cardList = new ArrayList<>();
+    public static RecyclerView<CardDetail> s_recyclerView = null;
     public static long prevTime, currTime;
-    private boolean displayStickNote;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -81,6 +78,16 @@ public class StickyController implements Initializable {
         syncButton.setOnMouseReleased(event -> syncButton.setStyle("-fx-background-color:#000"));
         syncButton.setOnMouseExited(event -> syncButton.setStyle("-fx-background-color:#000"));
         syncButton.setOnMouseClicked(this::syncHandler);
+
+        pinButton.setOnMouseEntered(event -> pinButton.setStyle("-fx-background-color:#595959"));
+        pinButton.setOnMouseReleased(event -> pinButton.setStyle("-fx-background-color:#000"));
+        pinButton.setOnMouseExited(event -> pinButton.setStyle("-fx-background-color:#000"));
+        pinButton.setOnMouseClicked(event -> {
+            Constants.stickyStage.setAlwaysOnTop(!Constants.stickyStage.isAlwaysOnTop());
+
+            if(Constants.stickyStage.isAlwaysOnTop()) pinImage.setImage(new Image("/images/ispinned.png"));
+            else pinImage.setImage(new Image("/images/notpinned.png"));
+        });
 
         addButton.setOnMouseEntered(event -> addButton.setStyle("-fx-background-color:#595959"));
         addButton.setOnMouseReleased(event -> addButton.setStyle("-fx-background-color:#000"));
@@ -144,8 +151,6 @@ public class StickyController implements Initializable {
         clearImage.setOpacity(0);
 
         prevTime = 0;
-
-        displayStickNote = true;
     }
 
     private void syncHandler(MouseEvent event)
@@ -153,6 +158,7 @@ public class StickyController implements Initializable {
         FirebaseConfig.syncUserData();
 
         syncButton.setStyle("-fx-background-color:#000");
+
         new Thread(() -> {
             RotateTransition rotate = new RotateTransition();
             rotate.setByAngle(360); rotate.setCycleCount(3);
@@ -225,20 +231,15 @@ public class StickyController implements Initializable {
                 ConfirmController.selectedIndex = selectedTile;
                 stickyPane.setDisable(true);
 
-                Stage stage = new Stage();
-                stage.initStyle(StageStyle.UNDECORATED);
-                stage.setX(Constants.WINDOW_WIDTH-315);
-                stage.setY(200);
-
-                stage.setAlwaysOnTop(true);
-                stage.setScene(new Scene(root));
+                Stage stage = new Stage(); stage.initStyle(StageStyle.UNDECORATED);
+                stage.setAlwaysOnTop(true); stage.setScene(new Scene(root));
+                stage.setX(Constants.WINDOW_WIDTH-315); stage.setY(200);
 
                 stage.showAndWait();
-                stickyPane.setDisable(false);
-
                 popoverMenu.hide();
             }
             catch (Exception e) {}
+            finally { stickyPane.setDisable(false); }
         });
         openBox.setOnMouseClicked(event -> {
 
@@ -255,7 +256,7 @@ public class StickyController implements Initializable {
 
     private void initNewNote(String text, int index) throws Exception {
 
-        if(index == -1) Constants.randomColor = (int) (Math.random() * Constants.LENGTH);
+        if(index == -1) { Constants.randomColor = (int) (Math.random() * Constants.LENGTH); }
         else {
             Constants.randomColor = cardList.get(index).getColor();
             Constants.card = cardList.get(index);
@@ -282,8 +283,8 @@ public class StickyController implements Initializable {
     class Adapter extends RecyclerView.Adapter<Card>
     {
         @Override
-        public Card onCreateViewHolder(FXMLLoader fxmlLoader) {
-
+        public Card onCreateViewHolder(FXMLLoader fxmlLoader)
+        {
             fxmlLoader.setLocation(getClass().getResource("views/cards.fxml"));
             Card card = new Card(fxmlLoader);
             return card;
@@ -305,7 +306,6 @@ public class StickyController implements Initializable {
                 if(!PopUpOpen) {
                     card.date.setStyle("-fx-text-fill: " +Constants.HEXCOLOR[cd.getColor()]);
                     card.date.setText(cd.getDate());
-
                     card.noteBorder.setStyle("-fx-background-color:#737373");
                 }
             });
@@ -317,7 +317,6 @@ public class StickyController implements Initializable {
             });
             card.cardBorderPane.setOnMouseClicked(event -> {
                 PopUpOpen = false;
-
                 card.noteBorder.setStyle("-fx-background-color:#4d4d4d");
 
                 currTime = System.currentTimeMillis();
@@ -326,9 +325,7 @@ public class StickyController implements Initializable {
                     selectedTile = recyclerView.getSelectionModel().getSelectedIndex();
                     popoverMenu.hide();
 
-                    try {
-                        initNewNote(cd.getText(), selectedTile);
-                    }
+                    try { initNewNote(cd.getText(), selectedTile); }
                     catch (Exception ignored) { }
                 }
                 prevTime = currTime;
@@ -348,10 +345,9 @@ public class StickyController implements Initializable {
     }
 }
 
-class Card extends RecyclerView.ViewHolder {
-
-    @FXML public Label textArea;
-    @FXML public Label date;
+class Card extends RecyclerView.ViewHolder
+{
+    @FXML public Label textArea, date;
     @FXML public Pane colorPane;
     @FXML public BorderPane cardBorderPane, cardBorder, noteBorder;
 

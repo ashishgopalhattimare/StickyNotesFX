@@ -18,9 +18,11 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("views/splashscreen.fxml"));
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(root));
-        primaryStage.show();
 
+        primaryStage.setAlwaysOnTop(true);
         primaryStage.getIcons().add(new Image("/images/logo.png"));
+
+        primaryStage.show();
 
         Rectangle2D window = Screen.getPrimary().getVisualBounds();
         Constants.WINDOW_HEIGHT = (int) window.getHeight();

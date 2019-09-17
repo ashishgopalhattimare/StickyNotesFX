@@ -45,6 +45,18 @@
                                 </FlowPane>
                                 <FlowPane alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="200.0" style="-fx-background-color: #000;" GridPane.columnIndex="1">
                            <children>
+                              <BorderPane fx:id="pinButton" prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: #000;">
+                                 <center>
+                                    <ImageView fx:id="pinImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                                       <image>
+                                          <Image url="@../../images/notpinned.png" />
+                                       </image>
+                                       <BorderPane.margin>
+                                          <Insets />
+                                       </BorderPane.margin>
+                                    </ImageView>
+                                 </center>
+                              </BorderPane>
                               <BorderPane fx:id="syncButton" prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: #000;">
                                  <center>
                                     <ImageView fx:id="syncImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">

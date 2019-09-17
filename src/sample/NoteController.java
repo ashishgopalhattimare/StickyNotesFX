@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 public class NoteController implements Initializable {
 
     @FXML private JFXButton color1, color2, color3, color4, color5, color6, color7;
-    @FXML private BorderPane addButton, ellipseButton, deleteButton, progressBar;
+    @FXML private BorderPane addButton, ellipseButton, deleteButton, progressBar, notePane;
     @FXML private JFXTextArea noteArea;
     @FXML private VBox scrollBox;
     @FXML
@@ -225,6 +225,7 @@ public class NoteController implements Initializable {
         }
 
         if(Constants.mainWindowClosed) { FirebaseConfig.syncUserData(); }
+        else { FirebaseConfig.syncUserData(); }
 
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         stage.close();

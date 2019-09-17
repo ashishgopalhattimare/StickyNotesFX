@@ -64,10 +64,9 @@ public class FirebaseConfig {
     }
 
     public static void syncUserData() {
-        removeUserData(Constants.user.getUsername(), true);
-    }
 
-    public static void removeUserData(String username, boolean dataData) {
+        String username = Constants.user.getUsername();
+
         firebase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -80,8 +79,7 @@ public class FirebaseConfig {
                     }
                 }
 
-                if(dataData)
-                {
+                if(StickyController.cardList.size() > 0) {
                     UserDetail x = Constants.user;
                     FirebaseUserDetail f = new FirebaseUserDetail(x.getUsername(), x.getFullName(), x.getEmail(), x.getPassword());
 

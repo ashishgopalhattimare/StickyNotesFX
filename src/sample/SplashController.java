@@ -55,10 +55,6 @@ public class SplashController implements Initializable {
             primaryStage.setX(Constants.WINDOW_WIDTH-350);
             primaryStage.setY(0);
 
-            primaryStage.setOnCloseRequest(e -> {
-                System.out.println("exs");
-            });
-
             primaryStage.show();
 
             Constants.stickyStage = primaryStage;
