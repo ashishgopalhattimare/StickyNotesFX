@@ -1,13 +1,13 @@
 package sample;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class FirebaseUserDetail {
 
     public String username, fullName;
     public String email, password;
+//    public boolean keep
 
     public List<Integer> cardf1;
     public List<String> cardf2, cardf3;

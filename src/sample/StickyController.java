@@ -20,6 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.controlsfx.control.PopOver;
 import org.kairos.layouts.RecyclerView;
@@ -43,7 +44,7 @@ public class StickyController implements Initializable {
     public static RecyclerView<CardDetail> s_recyclerView = null;
 
     @FXML private RecyclerView<CardDetail> recyclerView;
-    @FXML private BorderPane minimizeButton, settingButton, frontPane, backPane, syncButton;
+    @FXML private BorderPane minimizeButton, settingButton, syncButton, stickyPane;
     @FXML private BorderPane clearButton, searchButton, addButton, closeButton;
     @FXML private JFXTextField searchField;
     @FXML private ImageView clearImage, syncImage;
@@ -114,7 +115,10 @@ public class StickyController implements Initializable {
         settingButton.setOnMouseEntered(event -> settingButton.setStyle("-fx-background-color:#595959"));
         settingButton.setOnMouseReleased(event -> settingButton.setStyle("-fx-background-color:#000"));
         settingButton.setOnMouseExited(event -> settingButton.setStyle("-fx-background-color:#000"));
-        //settingButton.setOnMouseClicked(this::settingHandler);
+        settingButton.setOnMouseClicked(event -> {
+            Constants.stickyStage.hide();
+            Constants.settingStage.show();
+        });
 
         clearButton.setOnMouseReleased(event -> {
             if(clearImageVisible) { clearButton.setStyle("-fx-background-color:#737373"); }
@@ -136,12 +140,6 @@ public class StickyController implements Initializable {
             }
         });
 
-        try {
-            BorderPane x = FXMLLoader.load(getClass().getResource("views/userdetail.fxml"));
-            backPane.setCenter(x);
-        }
-        catch (Exception e) {}
-
         clearImageVisible = false;
         clearImage.setOpacity(0);
 
@@ -157,7 +155,7 @@ public class StickyController implements Initializable {
         syncButton.setStyle("-fx-background-color:#000");
         new Thread(() -> {
             RotateTransition rotate = new RotateTransition();
-            rotate.setByAngle(360); rotate.setCycleCount(10);
+            rotate.setByAngle(360); rotate.setCycleCount(3);
             rotate.setDuration(Duration.millis(1000));
             rotate.setAxis(Rotate.Z_AXIS);
 
@@ -165,30 +163,11 @@ public class StickyController implements Initializable {
             rotate.play();
 
             new Thread(() -> {
-                try { for(int i = 1; i <= 100; i++) {
-                    Thread.sleep(1000);
-                }
-                    rotate.stop(); System.out.println("stopped before");
+                try { for(int i = 1; i <= 100; i++) { Thread.sleep(1000); }
                 }
                 catch (Exception e) {}
             }).start();
-
-            rotate.setOnFinished(e -> System.out.println("done sync"));
         }).start();
-    }
-
-    private void settingHandler(MouseEvent event) {
-
-        displayStickNote = !(displayStickNote);
-
-        if(displayStickNote == true) {
-            frontPane.setOpacity(1); frontPane.setDisable(false);
-            backPane.setOpacity(0); backPane.setDisable(true);
-        }
-        else {
-            frontPane.setOpacity(0); frontPane.setDisable(true);
-            backPane.setOpacity(1); backPane.setDisable(true);
-        }
     }
 
     @FXML void keyReleased(KeyEvent event)
@@ -239,10 +218,27 @@ public class StickyController implements Initializable {
 
             selectedTile = recyclerView.getSelectionModel().getSelectedIndex();
 
-            recyclerView.getItems().remove(selectedTile);
-            cardList.remove(selectedTile);
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("views/confirmdelete.fxml"));
+                Parent root = loader.load();
 
-            popoverMenu.hide();
+                ConfirmController.selectedIndex = selectedTile;
+                stickyPane.setDisable(true);
+
+                Stage stage = new Stage();
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.setX(Constants.WINDOW_WIDTH-315);
+                stage.setY(200);
+
+                stage.setAlwaysOnTop(true);
+                stage.setScene(new Scene(root));
+
+                stage.showAndWait();
+                stickyPane.setDisable(false);
+
+                popoverMenu.hide();
+            }
+            catch (Exception e) {}
         });
         openBox.setOnMouseClicked(event -> {
 
@@ -279,6 +275,8 @@ public class StickyController implements Initializable {
 
         Constants.currStage = stage;
         stage.show();
+
+        stage.setOnCloseRequest(e -> FirebaseConfig.syncUserData());
     }
 
     class Adapter extends RecyclerView.Adapter<Card>
@@ -288,7 +286,6 @@ public class StickyController implements Initializable {
 
             fxmlLoader.setLocation(getClass().getResource("views/cards.fxml"));
             Card card = new Card(fxmlLoader);
-
             return card;
         }
 

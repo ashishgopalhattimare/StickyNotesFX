@@ -59,7 +59,7 @@
                         </ImageView>
                      </center>
                   </BorderPane>
-                  <BorderPane fx:id="progressBar" prefHeight="35.0" prefWidth="35.0">
+                  <BorderPane fx:id="progressBar" opacity="0.0" prefHeight="35.0" prefWidth="35.0">
                      <center>
                         <ProgressIndicator prefHeight="18.0" prefWidth="20.0" style="-fx-accent: #000;" BorderPane.alignment="CENTER" />
                      </center>

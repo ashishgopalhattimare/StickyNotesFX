@@ -60,6 +60,9 @@ public class SplashController implements Initializable {
             });
 
             primaryStage.show();
+
+            Constants.stickyStage = primaryStage;
+            new SettingController().setSettingStage();
         }
         catch (Exception e) {}
     }

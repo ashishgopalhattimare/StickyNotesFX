@@ -2,6 +2,11 @@ package sample;
 
 import javafx.stage.Stage;
 
+// System.setProperty("http.proxyHost", "webcache.example.com");
+// System.setProperty("http.proxyPort", "8080");
+
+// System.setProperty("java.net.useSystemProxies", "true");
+
 import java.time.LocalDateTime;
 
 public class Constants {
@@ -22,6 +27,8 @@ public class Constants {
 
     public static UserDetail user;
     public static boolean mainWindowClosed = false;
+
+    public static Stage stickyStage, settingStage;
 
     public static FirebaseUserDetail fbDetails = null;
 

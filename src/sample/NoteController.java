@@ -77,6 +77,7 @@ public class NoteController implements Initializable {
 
                 stage.setOnCloseRequest(e -> {
                     if(Constants.mainWindowClosed) { FirebaseConfig.syncUserData(); }
+                    else FirebaseConfig.syncUserData();
                 });
             }
             catch (Exception e) {}

@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane prefHeight="141.0" prefWidth="244.0" style="-fx-background-color: #000; -fx-border-color: #fff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ConfirmController">
+<BorderPane prefHeight="141.0" prefWidth="280.0" style="-fx-background-color: #000; -fx-border-color: #fff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ConfirmController">
    <top>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="57.0" prefWidth="242.0" text="Do you want to delete this node?" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
          <font>
@@ -18,12 +17,12 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <JFXButton alignment="CENTER" layoutX="43.0" layoutY="14.0" prefHeight="30.0" prefWidth="71.0" style="-fx-background-color: #0ff; -fx-background-radius: 0;" text="Delete">
+            <JFXButton fx:id="deleteButton" alignment="CENTER" layoutX="50.0" layoutY="14.0" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #1aa3ff; -fx-background-radius: 0;" text="Delete">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </JFXButton>
-            <JFXButton alignment="CENTER" layoutX="129.0" layoutY="14.0" prefHeight="30.0" prefWidth="71.0" style="-fx-background-color: #0ff; -fx-background-radius: 0;" text="Keep">
+            <JFXButton fx:id="keepButton" alignment="CENTER" layoutX="149.0" layoutY="14.0" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #a1a1a1; -fx-background-radius: 0;" text="Keep">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
