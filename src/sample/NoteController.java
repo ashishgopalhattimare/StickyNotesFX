@@ -74,6 +74,10 @@ public class NoteController implements Initializable {
                 Constants.currStage = stage;
 
                 stage.show();
+
+                stage.setOnCloseRequest(e -> {
+                    if(Constants.mainWindowClosed) { FirebaseConfig.syncUserData(); }
+                });
             }
             catch (Exception e) {}
         });
@@ -217,8 +221,9 @@ public class NoteController implements Initializable {
         {
             StickyController.s_recyclerView.getItems().remove(cardDetail);
             StickyController.cardList.remove(cardDetail);
-
         }
+
+        if(Constants.mainWindowClosed) { FirebaseConfig.syncUserData(); }
 
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         stage.close();

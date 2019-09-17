@@ -23,6 +23,8 @@ public class Constants {
     public static UserDetail user;
     public static boolean mainWindowClosed = false;
 
+    public static FirebaseUserDetail fbDetails = null;
+
     public static final String FIREBASE_LINK = "https://stickynotes-efe5c.firebaseio.com/";
 
     public static LocalDateTime getDateTime() {

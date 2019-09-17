@@ -30,23 +30,30 @@ public class FirebaseConfig {
                     FirebaseUserDetail firebaseUserDetail = detail.getValue(FirebaseUserDetail.class);
 
                     if(firebaseUserDetail.username.equals(requestUser.getUsername())) {
+                        Constants.fbDetails = firebaseUserDetail;
 
-                        System.out.println("Already Exists");
+                        for(int i = 0; i < Constants.fbDetails.cardf1.size(); i++) {
+                            CardDetail temp = new CardDetail(Constants.fbDetails.cardf2.get(i),
+                                    Constants.fbDetails.cardf1.get(i));
+                            temp.setDefaultDate(Constants.fbDetails.cardf3.get(i));
+
+                            StickyController.cardList.add(temp);
+                            StickyController.s_recyclerView.getItems().add(temp);
+                        }
 
                         new SplashController().generateStickyFrame();
+
                         return;
                     }
                 }
 
-                // firebase.child("Users").push().setValue(requestUser);
-                System.out.println("Newly Added");
-
-                // new SplashController().generateStickyFrame();
+                System.out.println("new agent");
+                new SplashController().generateStickyFrame();
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                System.out.println("doneerror");
             }
         });
     }

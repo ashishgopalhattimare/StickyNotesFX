@@ -16,8 +16,8 @@ public class FirebaseUserDetail {
         this.username = username; this.fullName = fullName;
         this.email = email; this.password = password;
 
-        cardf1 = new LinkedList<>(); cardf2 = new LinkedList<>();
-        cardf3 = new LinkedList<>();
+        cardf1 = new ArrayList<>(); cardf2 = new ArrayList<>();
+        cardf3 = new ArrayList<>();
     }
     public FirebaseUserDetail() {} // Default Constructor for the Firebase to work properly
 }

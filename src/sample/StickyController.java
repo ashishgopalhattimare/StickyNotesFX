@@ -55,23 +55,15 @@ public class StickyController implements Initializable {
     public static long prevTime, currTime;
     private boolean displayStickNote;
 
-    private static void handle(MouseEvent event) {
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        if(s_recyclerView == null) s_recyclerView = recyclerView;
 
         adapter = new Adapter();
         recyclerView.setAdapter(adapter);
 
-        cardList.add(new CardDetail("This is Note 1", 0));
-        cardList.add(new CardDetail("This is Note 2", 2));
-        cardList.add(new CardDetail("This is Note 3", 4));
-
-        for(CardDetail x : cardList) recyclerView.getItems().add(x);
         PopUpOpen = false;
-
-        if(s_recyclerView == null) s_recyclerView = recyclerView;
 
         createPopUpMenu();
 
@@ -104,7 +96,8 @@ public class StickyController implements Initializable {
         closeButton.setOnMouseExited(event -> closeButton.setStyle("-fx-background-color:#000"));
         closeButton.setOnMouseClicked(event -> {
 
-            System.out.println("SYNC ALL NOTES TO DATABASE");
+            Constants.mainWindowClosed = true;
+            FirebaseConfig.syncUserData();
 
             Stage stage = (Stage) closeButton.getScene().getWindow();
             stage.close();
