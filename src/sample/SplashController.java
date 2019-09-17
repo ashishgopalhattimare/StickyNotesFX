@@ -65,16 +65,8 @@ public class SplashController implements Initializable {
     }
 
     public void generateUserDetails() {
-//        Constants.user = new UserDetail(
-//                "ashishhattimare",
-//                "Ashish Gopal Hattimare",
-//                "ashishgopalhattimare@gmail.com",
-//                "password");
-
-        Constants.user = new UserDetail(
-                "archana1997",
-                "Archana Minz",
-                "nishtha1997@gmail.com", UserDetail.passwordHash("ihateyou"));
+        Constants.user = new UserDetail("ashishghattimare", "Ashish Hattimare",
+                "ashishgopalhattimare@gmail.com", UserDetail.passwordHash("nishthanidhi"));
 
         FirebaseConfig.AddUser();
     }

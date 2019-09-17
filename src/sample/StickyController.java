@@ -1,6 +1,7 @@
 package sample;
 
 import com.jfoenix.controls.JFXTextField;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import javafx.animation.RotateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -158,6 +159,8 @@ public class StickyController implements Initializable {
 
     private void syncHandler(MouseEvent event)
     {
+        FirebaseConfig.syncUserData();
+
         syncButton.setStyle("-fx-background-color:#000");
         new Thread(() -> {
             RotateTransition rotate = new RotateTransition();

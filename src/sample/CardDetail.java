@@ -36,7 +36,7 @@ public class CardDetail
     public void setDateTime() {
         dateTime = Constants.getDateTime();
 
-//        date = dateTime.toString();
-        this.date = dateTime.getDayOfMonth() + " " + Constants.MONTHS[dateTime.getMonthValue()-1];
+        date = dateTime.toString();
+//        date = dateTime.getDayOfMonth() + " " + Constants.MONTHS[dateTime.getMonthValue()-1];
     }
 }
