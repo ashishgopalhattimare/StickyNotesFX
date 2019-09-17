@@ -45,6 +45,7 @@ public class NoteController implements Initializable {
     private double note_x, note_y;
     private CardDetail cardDetail;
     private int cardColor;
+    private boolean cardFavourite = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -100,10 +101,15 @@ public class NoteController implements Initializable {
         favouriteButton.setOnMouseClicked(event -> {
             if(cardDetail != null) {
                 cardDetail.setFavourite(!cardDetail.isFavourite());
-
-                if(cardDetail.isFavourite()) favouriteImage.setImage(new Image("/images/isfavourite.png"));
-                else favouriteImage.setImage(new Image("/images/notfavourite.png"));
+                cardFavourite = cardDetail.isFavourite();
             }
+            else {
+                cardFavourite = !(cardFavourite);
+            }
+
+            if(cardFavourite) favouriteImage.setImage(new Image("/images/isfavourite.png"));
+            else favouriteImage.setImage(new Image("/images/notfavourite.png"));
+
         });
 
         ellipseButton.setOnMouseEntered(event -> ellipseButton.setStyle("-fx-background-color:" + Constants.selectColor));
@@ -153,7 +159,7 @@ public class NoteController implements Initializable {
             else {
                 // note does not exist, and is not empty -> place it at the top of the Sticky List
                 if(noteArea.getText().length() > 0) {
-                    cardDetail = new CardDetail(noteArea.getText(), cardColor);
+                    cardDetail = new CardDetail(noteArea.getText(), cardColor, cardFavourite);
 
                     StickyController.s_recyclerView.getItems().add(0, cardDetail);
                     StickyController.cardList.add(0, cardDetail);
@@ -171,9 +177,6 @@ public class NoteController implements Initializable {
 
         cardColor = Constants.randomColor;
         fillTitleBarColor(Constants.HEXCOLOR[cardColor]);
-
-//        if(cardDetail.isFavourite()) favouriteImage.setImage(new Image("/images/isfavourite.png"));
-//        else favouriteImage.setImage(new Image("/images/notfavourite.png"));
 
         cardDetail = Constants.card;
         Constants.card = null;
@@ -226,6 +229,11 @@ public class NoteController implements Initializable {
 
     public void setNoteArea(String text) {
         noteArea.setText(text);
+    }
+
+    public void setFavouriteImage(boolean favourite) {
+        if(favourite) favouriteImage.setImage(new Image("/images/isfavourite.png"));
+        else favouriteImage.setImage(new Image("/images/notfavourite.png"));
     }
 
     @FXML public void mouseDragged(MouseEvent event) {

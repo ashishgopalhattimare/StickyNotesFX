@@ -34,7 +34,8 @@ public class FirebaseConfig {
 
                         for(int i = 0; i < Constants.fbDetails.cardf1.size(); i++) {
                             CardDetail temp = new CardDetail(Constants.fbDetails.cardf2.get(i),
-                                    Constants.fbDetails.cardf1.get(i));
+                                    Constants.fbDetails.cardf1.get(i), Constants.fbDetails.cardf4.get(i));
+
                             temp.setDefaultDate(Constants.fbDetails.cardf3.get(i));
 
                             StickyController.cardList.add(temp);

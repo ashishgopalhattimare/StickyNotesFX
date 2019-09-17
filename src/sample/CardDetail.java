@@ -11,9 +11,9 @@ public class CardDetail
 
     private LocalDateTime dateTime;
 
-    public CardDetail(String text, int color) {
+    public CardDetail(String text, int color, boolean favourite) {
         this.text = text; this.color = color;
-        favourite = false;
+        this.favourite = favourite;
         setDateTime();
     }
 

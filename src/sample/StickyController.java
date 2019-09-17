@@ -95,7 +95,7 @@ public class StickyController implements Initializable
         addButton.setOnMouseExited(event -> addButton.setStyle("-fx-background-color:#000"));
         addButton.setOnMouseClicked(event -> {
             try { addButton.setStyle("-fx-background-color:#595959");
-                initNewNote("", -1);
+                initNewNote("", -1, false);
             }
             catch (Exception e) { e.printStackTrace(); }
         });
@@ -253,13 +253,13 @@ public class StickyController implements Initializable
 
             try {
                 CardDetail card = cardList.get(selectedTile);
-                initNewNote(card.getText(), selectedTile);
+                initNewNote(card.getText(), selectedTile, card.isFavourite());
             }
             catch (Exception ignored) { }
         });
     }
 
-    private void initNewNote(String text, int index) throws Exception {
+    private void initNewNote(String text, int index, boolean favourite) throws Exception {
 
         if(index == -1) { Constants.randomColor = (int) (Math.random() * Constants.LENGTH); }
         else {
@@ -272,6 +272,8 @@ public class StickyController implements Initializable
 
         NoteController controller = loader.getController();
         controller.setNoteArea(text);
+
+        controller.setFavouriteImage(favourite);
 
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
@@ -339,7 +341,7 @@ public class StickyController implements Initializable
                     selectedTile = recyclerView.getSelectionModel().getSelectedIndex();
                     popoverMenu.hide();
 
-                    try { initNewNote(cd.getText(), selectedTile); }
+                    try { initNewNote(cd.getText(), selectedTile, cardList.get(selectedTile).isFavourite()); }
                     catch (Exception ignored) { }
                 }
                 prevTime = currTime;
