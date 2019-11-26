@@ -5,11 +5,27 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import com.google.gson.Gson;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Iterator;
+
 public class FirebaseConfig {
 
     public static Firebase firebase = null;
+    private static JSONParser parser = new JSONParser();
+    private static Gson gson = new Gson();
 
     public static void SetUpConnection() {
+
         try {
             firebase = new Firebase(Constants.FIREBASE_LINK);
             return;
@@ -22,41 +38,64 @@ public class FirebaseConfig {
 
     public static void addUserToFirebase(UserDetail requestUser) {
 
-        firebase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        String path = Constants.FIREBASE_LINK + "/Users/.json";
+        boolean newUser = false;
+        try {
+            URL url = new URL(path);
+            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 
-                for(DataSnapshot detail : dataSnapshot.getChildren()) {
-                    FirebaseUserDetail firebaseUserDetail = detail.getValue(FirebaseUserDetail.class);
+            String jsonString = br.readLine();
+            if(!jsonString.equals("null")) {
+                JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+
+                for(Object keyStr : jsonObject.keySet()) {
+                    String key = (String) keyStr;
+                    FirebaseUserDetail firebaseUserDetail = gson.fromJson(jsonObject.get(key) + "", FirebaseUserDetail.class);
 
                     if(firebaseUserDetail.username.equals(requestUser.getUsername())) {
-                        Constants.fbDetails = firebaseUserDetail;
+                        newUser = false;
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
-                        for(int i = 0; i < Constants.fbDetails.cardf1.size(); i++) {
-                            CardDetail temp = new CardDetail(Constants.fbDetails.cardf2.get(i),
-                                    Constants.fbDetails.cardf1.get(i), Constants.fbDetails.cardf4.get(i));
+        new SplashController().generateStickyFrame(); // open new frame
 
-                            temp.setDefaultDate(Constants.fbDetails.cardf3.get(i));
+        if(!newUser) {
+            firebase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            StickyController.cardList.add(temp);
-                            StickyController.s_recyclerView.getItems().add(temp);
+                    for(DataSnapshot detail : dataSnapshot.getChildren()) {
+                        FirebaseUserDetail firebaseUserDetail = detail.getValue(FirebaseUserDetail.class);
+
+                        if(firebaseUserDetail.username.equals(requestUser.getUsername())) {
+                            Constants.fbDetails = firebaseUserDetail;
+
+                            for(int i = 0; i < Constants.fbDetails.cardf1.size(); i++) {
+                                CardDetail temp = new CardDetail(Constants.fbDetails.cardf2.get(i),
+                                        Constants.fbDetails.cardf1.get(i), Constants.fbDetails.cardf4.get(i));
+
+                                temp.setDefaultDate(Constants.fbDetails.cardf3.get(i));
+
+                                StickyController.cardList.add(temp);
+                                StickyController.s_recyclerView.getItems().add(temp);
+                            }
+
+                            return;
                         }
-
-                        new SplashController().generateStickyFrame();
-
-                        return;
                     }
                 }
 
-                System.out.println("new agent");
-                new SplashController().generateStickyFrame();
-            }
+                @Override
+                public void onCancelled(FirebaseError firebaseError) { }
+            });
+        }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("doneerror");
-            }
-        });
+        return;
     }
 
     public static void AddUser() {

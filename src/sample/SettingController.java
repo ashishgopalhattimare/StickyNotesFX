@@ -51,6 +51,10 @@ public class SettingController implements Initializable {
             Constants.stickyStage.show();
         });
 
+        signoutLabel.setOnMouseClicked(event -> {
+            System.out.println("signout please");
+        });
+
         syncButton.setOnAction(event -> FirebaseConfig.syncUserData());
 
         profilePane.setFill(new ImagePattern(new Image("/images/myself.jpg")));

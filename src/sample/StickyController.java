@@ -53,6 +53,7 @@ public class StickyController implements Initializable
     public static ArrayList<CardDetail> cardList = new ArrayList<>();
     public static RecyclerView<CardDetail> s_recyclerView = null;
     public static long prevTime, currTime;
+    public static boolean syncingData;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -63,6 +64,7 @@ public class StickyController implements Initializable
         recyclerView.setAdapter(adapter);
 
         PopUpOpen = false;
+        syncingData = false;
 
         createPopUpMenu();
 
@@ -160,25 +162,30 @@ public class StickyController implements Initializable
 
     private void syncHandler(MouseEvent event)
     {
-        FirebaseConfig.syncUserData();
+        syncingData = true;
 
-        syncButton.setStyle("-fx-background-color:#000");
+        if(syncingData)
+        {
+            FirebaseConfig.syncUserData();
 
-        new Thread(() -> {
-            RotateTransition rotate = new RotateTransition();
-            rotate.setByAngle(360); rotate.setCycleCount(3);
-            rotate.setDuration(Duration.millis(1000));
-            rotate.setAxis(Rotate.Z_AXIS);
-
-            rotate.setNode(syncImage);
-            rotate.play();
+            syncButton.setStyle("-fx-background-color:#000");
 
             new Thread(() -> {
-                try { for(int i = 1; i <= 100; i++) { Thread.sleep(1000); }
-                }
-                catch (Exception e) {}
+                RotateTransition rotate = new RotateTransition();
+                rotate.setByAngle(360); rotate.setCycleCount(3);
+                rotate.setDuration(Duration.millis(1000));
+                rotate.setAxis(Rotate.Z_AXIS);
+
+                rotate.setNode(syncImage);
+                rotate.play();
+
+                new Thread(() -> {
+                    try {   for(int i = 1; i <= 100; i++) { Thread.sleep(1000); }
+                    }
+                    catch (Exception e) {}
+                }).start();
             }).start();
-        }).start();
+        }
     }
 
     @FXML void keyReleased(KeyEvent event)

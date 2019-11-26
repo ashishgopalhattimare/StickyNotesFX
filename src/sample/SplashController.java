@@ -31,7 +31,6 @@ public class SplashController implements Initializable {
         fadeOut.setOnFinished(event -> {
             try {
                 generateUserDetails();
-                generateStickyFrame();
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -64,8 +63,8 @@ public class SplashController implements Initializable {
     }
 
     public void generateUserDetails() {
-        Constants.user = new UserDetail("ashishghattimare", "Ashish Hattimare",
-                "ashishgopalhattimare@gmail.com", UserDetail.passwordHash("nishthanidhi"));
+        Constants.user = new UserDetail("ashishgh1997", "Ashish Gopal",
+                "ashish@gmail.com", UserDetail.passwordHash("nishthanidhi"));
 
         FirebaseConfig.AddUser();
     }
