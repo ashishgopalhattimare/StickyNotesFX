@@ -50,15 +50,18 @@ public class StickyController implements Initializable
     private boolean clearImageVisible;
     private int selectedTile;
 
-    public static ArrayList<CardDetail> cardList = new ArrayList<>();
     public static RecyclerView<CardDetail> s_recyclerView = null;
+    public static ArrayList<CardDetail> cardList;
     public static long prevTime, currTime;
     public static boolean syncingData;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        if(s_recyclerView == null) s_recyclerView = recyclerView;
+        if(s_recyclerView == null) {
+            s_recyclerView = recyclerView;
+            cardList = new ArrayList<>();
+        }
 
         adapter = new Adapter();
         recyclerView.setAdapter(adapter);

@@ -4,26 +4,19 @@ import java.security.MessageDigest;
 
 public class UserDetail
 {
-    private String username, fullName;
+    private String username;
     private String email;
     private String password;
 
     public UserDetail() {}
 
-    public UserDetail(String username, String fullName, String email, String password) {
-        this.username = username; this.fullName = fullName;
-        this.email = email; this.password = password;
+    public UserDetail(String username, String email, String password) {
+        this.username = username; this.email = email; this.password = password;
     }
 
     public String getUsername() { return username; }
-    public String getFullName() { return fullName; }
     public String getPassword() { return password; }
     public String getEmail() { return email; }
-
-    public void setFullName(String fullName) { this.fullName = fullName; }
-    public void setUsername(String username) { this.username = username; }
-    public void setPassword(String password) { this.password = password; }
-    public void setEmail(String email) { this.email = email; }
 
     public static String passwordHash(String password) {
         try {

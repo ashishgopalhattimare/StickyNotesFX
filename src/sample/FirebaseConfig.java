@@ -6,21 +6,17 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import com.google.gson.Gson;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.Iterator;
 
 public class FirebaseConfig {
 
     public static Firebase firebase = null;
+
     private static JSONParser parser = new JSONParser();
     private static Gson gson = new Gson();
 
@@ -29,17 +25,23 @@ public class FirebaseConfig {
         try {
             firebase = new Firebase(Constants.FIREBASE_LINK);
             return;
+        } catch (Exception e) {
         }
-        catch (Exception e) {}
 
         firebase = null;
-        if(firebase == null) System.out.println("Not Connected");
+        System.out.println("Not Connected");
     }
 
-    public static void addUserToFirebase(UserDetail requestUser) {
+    public static void addUserDetails(UserDetail object)
+    {
+        firebase.child("UserDetail").push().setValue(object);
+        Constants.userDetail = object;
+    }
 
-        String path = Constants.FIREBASE_LINK + "/Users/.json";
-        boolean newUser = false;
+    // return not null if the user exists
+    public static boolean userExist(String username, String password)
+    {
+        String path = Constants.FIREBASE_LINK + "/UserDetail/.json";
         try {
             URL url = new URL(path);
             BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -48,18 +50,77 @@ public class FirebaseConfig {
             if(!jsonString.equals("null")) {
                 JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
 
-                for(Object keyStr : jsonObject.keySet()) {
-                    String key = (String) keyStr;
-                    FirebaseUserDetail firebaseUserDetail = gson.fromJson(jsonObject.get(key) + "", FirebaseUserDetail.class);
+                for(Object key : jsonObject.keySet()) {
+                    UserDetail fud = gson.fromJson(jsonObject.get(key) + "", UserDetail.class);
 
-                    if(firebaseUserDetail.username.equals(requestUser.getUsername())) {
-                        newUser = false;
+                    if(fud.getUsername().equals(username) && fud.getPassword().equals(UserDetail.passwordHash(password))) {
+
+                        Constants.userDetail = new UserDetail(username, fud.getEmail(), fud.getPassword());
+                        return true;
                     }
                 }
             }
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (Exception e) {}
+
+        return false; // user doesnot exists
+    }
+
+    public static boolean loginValid(String username, String password)
+    {
+        String path = Constants.FIREBASE_LINK + "/UserDetail/.json";
+
+        System.out.println("here as well1");
+        try {
+            URL url = new URL(path);
+            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+
+            String jsonString = br.readLine();
+            if(!jsonString.equals("null")) {
+                JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+
+                for(Object key : jsonObject.keySet()) {
+                    UserDetail fud = gson.fromJson(jsonObject.get(key) + "", UserDetail.class);
+
+                    if(fud.getUsername().equals(username) && fud.getPassword().equals(UserDetail.passwordHash(password))) {
+                        return true;
+                    }
+                }
+            }
+        }
+        catch (Exception e) {}
+
+        return false;
+    }
+
+    public static boolean freeUsername(String username) {
+        String path = Constants.FIREBASE_LINK + "/UserDetail/.json";
+
+        System.out.println("check for username already taken or not!!!");
+        try {
+            URL url = new URL(path);
+            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+            String jsonString = br.readLine();
+            if(!jsonString.equals("null")) {
+                JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+                for(Object key : jsonObject.keySet()) {
+                    UserDetail fud = gson.fromJson(jsonObject.get(key) + "", UserDetail.class);
+                    if(fud.getUsername().equals(username)) return false;
+                }
+            }
+
+            return true;
+        }
+        catch (Exception e) {}
+        return false;
+    }
+
+    public static void addUserToFirebase(UserDetail requestUserDetail) {
+
+        boolean newUser = false;
+
+        if(loginValid(requestUserDetail.getUsername(), requestUserDetail.getPassword())) {
+            newUser = false;
         }
 
         new SplashController().generateStickyFrame(); // open new frame
@@ -70,10 +131,10 @@ public class FirebaseConfig {
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     for(DataSnapshot detail : dataSnapshot.getChildren()) {
-                        FirebaseUserDetail firebaseUserDetail = detail.getValue(FirebaseUserDetail.class);
+                        FirebaseUser firebaseUser = detail.getValue(FirebaseUser.class);
 
-                        if(firebaseUserDetail.username.equals(requestUser.getUsername())) {
-                            Constants.fbDetails = firebaseUserDetail;
+                        if(firebaseUser.username.equals(requestUserDetail.getUsername())) {
+                            Constants.fbDetails = firebaseUser;
 
                             for(int i = 0; i < Constants.fbDetails.cardf1.size(); i++) {
                                 CardDetail temp = new CardDetail(Constants.fbDetails.cardf2.get(i),
@@ -99,29 +160,31 @@ public class FirebaseConfig {
     }
 
     public static void AddUser() {
-        if(firebase != null) { addUserToFirebase(Constants.user); }
-        else System.out.println("Not Connected");
+        if(firebase != null)
+            addUserToFirebase(Constants.userDetail);
+        else
+            System.out.println("Not Connected");
     }
 
     public static void syncUserData() {
 
-        String username = Constants.user.getUsername();
+        String username = Constants.userDetail.getUsername();
 
         firebase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot detail : dataSnapshot.getChildren()) {
-                    FirebaseUserDetail firebaseUserDetail = detail.getValue(FirebaseUserDetail.class);
-                    if(firebaseUserDetail.username.equals(username)) {
+                    FirebaseUser firebaseUser = detail.getValue(FirebaseUser.class);
+                    if(firebaseUser.username.equals(username)) {
                         detail.getRef().removeValue();
                         break;
                     }
                 }
 
                 if(StickyController.cardList.size() > 0) {
-                    UserDetail x = Constants.user;
-                    FirebaseUserDetail f = new FirebaseUserDetail(x.getUsername(), x.getFullName(), x.getEmail(), x.getPassword());
+                    UserDetail x = Constants.userDetail;
+                    FirebaseUser f = new FirebaseUser(x.getUsername());
 
                     for(CardDetail card : StickyController.cardList) {
                         f.cardf1.add(card.getColor());

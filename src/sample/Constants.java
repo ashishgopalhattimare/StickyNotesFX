@@ -25,13 +25,14 @@ public class Constants {
     public static CardDetail card;
     public static Stage currStage;
 
-    public static UserDetail user;
+    public static UserDetail userDetail;
+
     public static boolean mainWindowClosed = false;
     public static int openedNotes = 0;
 
     public static Stage stickyStage, settingStage;
 
-    public static FirebaseUserDetail fbDetails = null;
+    public static FirebaseUser fbDetails = null;
 
     public static final String FIREBASE_LINK = "https://stickynotes-efe5c.firebaseio.com/";
 

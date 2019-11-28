@@ -30,7 +30,20 @@ public class SplashController implements Initializable {
         fadeOut.play();
         fadeOut.setOnFinished(event -> {
             try {
-                generateUserDetails();
+//                generateUserDetails();
+                try {
+                    Stage primaryStage = new Stage();
+                    Parent root = FXMLLoader.load(getClass().getResource("views/login.fxml"));
+
+                    primaryStage.initStyle(StageStyle.UNDECORATED);
+                    primaryStage.getIcons().add(new Image("/images/logo.png"));
+                    primaryStage.setScene(new Scene(root));
+
+                    primaryStage.show();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -60,12 +73,5 @@ public class SplashController implements Initializable {
             new SettingController().setSettingStage();
         }
         catch (Exception e) {}
-    }
-
-    public void generateUserDetails() {
-        Constants.user = new UserDetail("ashishgh1997", "Ashish Gopal",
-                "ashish@gmail.com", UserDetail.passwordHash("nishthanidhi"));
-
-        FirebaseConfig.AddUser();
     }
 }

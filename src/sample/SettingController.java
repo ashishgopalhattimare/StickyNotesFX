@@ -52,15 +52,32 @@ public class SettingController implements Initializable {
         });
 
         signoutLabel.setOnMouseClicked(event -> {
-            System.out.println("signout please");
+            try {
+                Stage stage = (Stage) closeButton.getScene().getWindow();
+                stage.close();
+
+                StickyController.s_recyclerView = null; // refresh the session
+
+                Stage primaryStage = new Stage();
+                Parent root = FXMLLoader.load(getClass().getResource("views/login.fxml"));
+
+                primaryStage.initStyle(StageStyle.UNDECORATED);
+                primaryStage.getIcons().add(new Image("/images/logo.png"));
+                primaryStage.setScene(new Scene(root));
+
+                primaryStage.show();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
         syncButton.setOnAction(event -> FirebaseConfig.syncUserData());
 
         profilePane.setFill(new ImagePattern(new Image("/images/myself.jpg")));
 
-        username.setText(Constants.user.getUsername());
-        email.setText(Constants.user.getEmail());
+        username.setText(Constants.userDetail.getUsername());
+        email.setText(Constants.userDetail.getEmail());
 
     }
 
