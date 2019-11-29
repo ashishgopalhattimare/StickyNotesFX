@@ -39,7 +39,7 @@ public class FirebaseConfig {
     }
 
     // return not null if the user exists
-    public static boolean userExist(String username, String password)
+    public static boolean userExistLogin(String username, String password)
     {
         String path = Constants.FIREBASE_LINK + "/UserDetail/.json";
         try {
@@ -53,10 +53,12 @@ public class FirebaseConfig {
                 for(Object key : jsonObject.keySet()) {
                     UserDetail fud = gson.fromJson(jsonObject.get(key) + "", UserDetail.class);
 
-                    if(fud.getUsername().equals(username) && fud.getPassword().equals(UserDetail.passwordHash(password))) {
-
-                        Constants.userDetail = new UserDetail(username, fud.getEmail(), fud.getPassword());
-                        return true;
+                    if(fud.getUsername().equals(username)) {
+                        if(fud.getPassword().equals(UserDetail.passwordHash(password))) {
+                            Constants.userDetail = new UserDetail(username, fud.getEmail(), fud.getPassword());
+                            return true;
+                        }
+                        return false;
                     }
                 }
             }
@@ -64,33 +66,6 @@ public class FirebaseConfig {
         catch (Exception e) {}
 
         return false; // user doesnot exists
-    }
-
-    public static boolean loginValid(String username, String password)
-    {
-        String path = Constants.FIREBASE_LINK + "/UserDetail/.json";
-
-        System.out.println("here as well1");
-        try {
-            URL url = new URL(path);
-            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-
-            String jsonString = br.readLine();
-            if(!jsonString.equals("null")) {
-                JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
-
-                for(Object key : jsonObject.keySet()) {
-                    UserDetail fud = gson.fromJson(jsonObject.get(key) + "", UserDetail.class);
-
-                    if(fud.getUsername().equals(username) && fud.getPassword().equals(UserDetail.passwordHash(password))) {
-                        return true;
-                    }
-                }
-            }
-        }
-        catch (Exception e) {}
-
-        return false;
     }
 
     public static boolean freeUsername(String username) {
@@ -119,7 +94,7 @@ public class FirebaseConfig {
 
         boolean newUser = false;
 
-        if(loginValid(requestUserDetail.getUsername(), requestUserDetail.getPassword())) {
+        if(userExistLogin(requestUserDetail.getUsername(), requestUserDetail.getPassword())) {
             newUser = false;
         }
 

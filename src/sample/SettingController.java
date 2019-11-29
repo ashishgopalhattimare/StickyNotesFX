@@ -56,6 +56,8 @@ public class SettingController implements Initializable {
                 Stage stage = (Stage) closeButton.getScene().getWindow();
                 stage.close();
 
+                FileRW.writeFile("");
+
                 StickyController.s_recyclerView = null; // refresh the session
 
                 Stage primaryStage = new Stage();
@@ -64,7 +66,7 @@ public class SettingController implements Initializable {
                 primaryStage.initStyle(StageStyle.UNDECORATED);
                 primaryStage.getIcons().add(new Image("/images/logo.png"));
                 primaryStage.setScene(new Scene(root));
-
+                primaryStage.setAlwaysOnTop(true);
                 primaryStage.show();
             }
             catch (Exception e) {

@@ -47,11 +47,12 @@ public class LogInController implements Initializable {
         if(pass.isEmpty()) login_password.setStyle("-fx-border-color: #f00");
 
         if(!user.isEmpty() && !pass.isEmpty()) { // check user details
-            if(FirebaseConfig.loginValid(user, pass)) {
+            if(FirebaseConfig.userExistLogin(user, pass)) {
                 Stage stage = (Stage) loginPage.getScene().getWindow();
                 stage.close();
 
-                FirebaseConfig.userExist(user, pass);
+                FileRW.writeFile(user + " " + pass);
+
                 FirebaseConfig.AddUser();
             }
             else {
@@ -66,6 +67,8 @@ public class LogInController implements Initializable {
         if(FirebaseConfig.freeUsername(signup_username.getText())) {
             Stage stage = (Stage) loginPage.getScene().getWindow();
             stage.close();
+
+            FileRW.writeFile(signup_username.getText() + " " + signup_password.getText());
 
             FirebaseConfig.addUserDetails(new UserDetail(signup_username.getText(),
                     signup_email.getText(), UserDetail.passwordHash(signup_password.getText())));
