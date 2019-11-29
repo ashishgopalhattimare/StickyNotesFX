@@ -42,6 +42,8 @@ public class FirebaseConfig {
     public static boolean userExistLogin(String username, String password)
     {
         String path = Constants.FIREBASE_LINK + "/UserDetail/.json";
+
+        System.out.println("user exists login validation");
         try {
             URL url = new URL(path);
             BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -134,9 +136,9 @@ public class FirebaseConfig {
         return;
     }
 
-    public static void AddUser() {
-        if(firebase != null)
-            addUserToFirebase(Constants.userDetail);
+    public static void AddUser()
+    {
+        if(firebase != null) addUserToFirebase(Constants.userDetail);
         else
             System.out.println("Not Connected");
     }

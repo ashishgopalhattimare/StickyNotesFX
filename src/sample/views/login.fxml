@@ -7,6 +7,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="410.0" prefWidth="263.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.LogInController">
@@ -18,6 +19,20 @@
                   <Image url="@../../images/logo.png" />
                </image>
             </ImageView>
+            <ImageView fx:id="closeButton" fitHeight="30.0" fitWidth="30.0" layoutX="234.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/closeBlack.png" />
+               </image>
+            </ImageView>
+            <BorderPane fx:id="backButton" disable="true" layoutX="-1.0" layoutY="-1.0" opacity="0.0" prefHeight="30.0" prefWidth="30.0">
+               <center>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                     <image>
+                        <Image url="@../../images/backBlack.png" />
+                     </image>
+                  </ImageView>
+               </center>
+            </BorderPane>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="loginPage" layoutY="128.0" prefHeight="282.0" prefWidth="263.0" style="-fx-background-color: #fff;">

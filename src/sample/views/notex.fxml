@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXListView?>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" prefHeight="400.0" prefWidth="600.0">
+    <center>
+        <BorderPane prefWidth="400.0" BorderPane.alignment="CENTER">
+            <center>
+<!--                <JFXTextArea fx:id="noteArea" focusColor="#405aa800" promptText="Take a Note" style="-fx-background-color: #595959; -fx-background-radius: 0; -fx-text-fill: #fff;" unFocusColor="#4d4d4d00" wrapText="true" BorderPane.alignment="TOP_LEFT">-->
+<!--                -->
+<!--                </JFXTextArea>-->
+            </center>
+<!--            <bottom>-->
+<!--                <VBox fx:id="scrollBox" alignment="BOTTOM_CENTER" prefHeight="0.0" prefWidth="455.0" style="-fx-background-color: #595959;" BorderPane.alignment="BOTTOM_CENTER">-->
+<!--                    <children>-->
+<!--                        <Pane prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: #ff3300;" />-->
+<!--                        <JFXListView fx:id="imageView" orientation="HORIZONTAL" prefHeight="0.0" prefWidth="455.0" VBox.vgrow="NEVER" />-->
+<!--                    </children>-->
+<!--                </VBox>-->
+<!--            </bottom>-->
+        </BorderPane>
+    </center>
+</BorderPane>
