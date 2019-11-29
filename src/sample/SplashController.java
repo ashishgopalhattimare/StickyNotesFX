@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import sample.Firebase.FirebaseConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;

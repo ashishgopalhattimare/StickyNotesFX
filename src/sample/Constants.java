@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.stage.Stage;
+import sample.Firebase.FirebaseUser;
 
 // System.setProperty("http.proxyHost", "webcache.example.com");
 // System.setProperty("http.proxyPort", "8080");

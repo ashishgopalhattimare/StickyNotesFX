@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.Stage;
+import sample.Firebase.FirebaseConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;

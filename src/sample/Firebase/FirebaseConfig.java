@@ -1,4 +1,4 @@
-package sample;
+package sample.Firebase;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -8,6 +8,7 @@ import com.firebase.client.ValueEventListener;
 import com.google.gson.Gson;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import sample.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -25,8 +26,7 @@ public class FirebaseConfig {
         try {
             firebase = new Firebase(Constants.FIREBASE_LINK);
             return;
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
 
         firebase = null;
         System.out.println("Not Connected");

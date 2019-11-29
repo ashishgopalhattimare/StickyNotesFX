@@ -1,9 +1,7 @@
 package sample;
 
 import com.jfoenix.controls.JFXTextField;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import javafx.animation.RotateTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,6 +23,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.controlsfx.control.PopOver;
 import org.kairos.layouts.RecyclerView;
+import sample.Firebase.FirebaseConfig;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -66,8 +65,7 @@ public class StickyController implements Initializable
         adapter = new Adapter();
         recyclerView.setAdapter(adapter);
 
-        PopUpOpen = false;
-        syncingData = false;
+        PopUpOpen = syncingData = false;
 
         createPopUpMenu();
 

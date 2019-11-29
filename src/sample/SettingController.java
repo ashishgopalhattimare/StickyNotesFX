@@ -13,6 +13,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sample.Firebase.FirebaseConfig;
 
 import java.net.URL;
 import java.util.ResourceBundle;
