@@ -21,13 +21,9 @@ import java.util.ResourceBundle;
 public class SettingController implements Initializable {
 
     @FXML private BorderPane settingPane;
-
     @FXML private Label username, email, signoutLabel;
-
     @FXML private JFXButton syncButton;
-
     @FXML private Circle profilePane;
-
     @FXML private BorderPane closeButton, backButton;
 
     @Override
@@ -39,6 +35,10 @@ public class SettingController implements Initializable {
         closeButton.setOnMouseClicked(event -> {
             Constants.mainWindowClosed = true;
             FirebaseConfig.syncUserData();
+
+            if(Constants.mainWindowClosed && Constants.openedNotes == 0) {
+                System.exit(0);
+            }
 
             Stage stage = (Stage) closeButton.getScene().getWindow();
             stage.close();

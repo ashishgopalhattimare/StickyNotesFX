@@ -57,68 +57,81 @@ public class StickyController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        if(s_recyclerView == null) {
+        // Reinitialise the cardList and recyclerView
+        if(s_recyclerView == null)
+        {
             s_recyclerView = recyclerView;
             cardList = new ArrayList<>();
-        }
+        }// end if
 
         adapter = new Adapter();
         recyclerView.setAdapter(adapter);
 
         PopUpOpen = syncingData = false;
 
-        createPopUpMenu();
+        createPopUpMenu(); // Create a small pane for delete and open popup option template
 
+        // CURRENTLY NOT WORKING
         searchButton.setOnMouseReleased(event -> searchButton.setStyle("-fx-background-color:#737373"));
         searchButton.setOnMousePressed(event -> searchButton.setStyle("-fx-background-color:#595959"));
         searchButton.setOnMouseEntered(event -> searchButton.setStyle("-fx-background-color:#595959"));
         searchButton.setOnMouseExited(event -> searchButton.setStyle("-fx-background-color:#737373"));
         searchButton.setOnMouseClicked(event -> {
-
             searchButton.setStyle("-fx-background-color:#595959");
         });
 
+        // Sync user's data and cards to the firebase
         syncButton.setOnMouseEntered(event -> syncButton.setStyle("-fx-background-color:#595959"));
         syncButton.setOnMouseReleased(event -> syncButton.setStyle("-fx-background-color:#000"));
         syncButton.setOnMouseExited(event -> syncButton.setStyle("-fx-background-color:#000"));
         syncButton.setOnMouseClicked(this::syncHandler);
 
+        // Allow the user to pin the sticky note "Always on Top"
         pinButton.setOnMouseEntered(event -> pinButton.setStyle("-fx-background-color:#595959"));
         pinButton.setOnMouseReleased(event -> pinButton.setStyle("-fx-background-color:#000"));
         pinButton.setOnMouseExited(event -> pinButton.setStyle("-fx-background-color:#000"));
         pinButton.setOnMouseClicked(event -> {
+
+            // Pin or Pin-out the sticky note from "Always on Top" status
             Constants.stickyStage.setAlwaysOnTop(!Constants.stickyStage.isAlwaysOnTop());
 
+            // Update the pin image on the status
             if(Constants.stickyStage.isAlwaysOnTop()) pinImage.setImage(new Image("/images/ispinned.png"));
             else pinImage.setImage(new Image("/images/notpinned.png"));
         });
 
+        // Open new note for the user
         addButton.setOnMouseEntered(event -> addButton.setStyle("-fx-background-color:#595959"));
         addButton.setOnMouseReleased(event -> addButton.setStyle("-fx-background-color:#000"));
         addButton.setOnMouseExited(event -> addButton.setStyle("-fx-background-color:#000"));
         addButton.setOnMouseClicked(event -> {
+
+            // Open new note
             try { addButton.setStyle("-fx-background-color:#595959");
                 initNewNote("", -1, false);
             }
-            catch (Exception e) { e.printStackTrace(); }
+            catch (Exception ignored) { }
         });
 
+        // Close the main sticky note application
         closeButton.setOnMouseEntered(event -> closeButton.setStyle("-fx-background-color:#595959"));
         closeButton.setOnMouseReleased(event -> closeButton.setStyle("-fx-background-color:#000"));
         closeButton.setOnMouseExited(event -> closeButton.setStyle("-fx-background-color:#000"));
         closeButton.setOnMouseClicked(event -> {
 
             Constants.mainWindowClosed = true;
-            FirebaseConfig.syncUserData();
+            FirebaseConfig.syncUserData(); // sync the data
 
+            // If the mainWindow is closed and there are not opened notes, then close the application
             if(Constants.mainWindowClosed && Constants.openedNotes == 0) {
                 System.exit(0);
-            }
+            }// end if
 
             Stage stage = (Stage) closeButton.getScene().getWindow();
             stage.close();
         });
 
+        // Minimize the window programmatically
         minimizeButton.setOnMouseEntered(event -> minimizeButton.setStyle("-fx-background-color:#595959"));
         minimizeButton.setOnMouseReleased(event -> minimizeButton.setStyle("-fx-background-color:#000"));
         minimizeButton.setOnMouseExited(event -> minimizeButton.setStyle("-fx-background-color:#000"));
@@ -127,6 +140,7 @@ public class StickyController implements Initializable
             stage.setIconified(true);
         });
 
+        // Open setting page
         settingButton.setOnMouseEntered(event -> settingButton.setStyle("-fx-background-color:#595959"));
         settingButton.setOnMouseReleased(event -> settingButton.setStyle("-fx-background-color:#000"));
         settingButton.setOnMouseExited(event -> settingButton.setStyle("-fx-background-color:#000"));
@@ -161,16 +175,22 @@ public class StickyController implements Initializable
         prevTime = 0;
     }
 
+    /**
+     * Method Name : su\yncHandler
+     * Purpose : Sync data when user clicks on it
+     *
+     * @param event
+     */
     private void syncHandler(MouseEvent event)
     {
         syncingData = true;
-
         if(syncingData)
         {
-            FirebaseConfig.syncUserData();
+            FirebaseConfig.syncUserData(); // sync data to firebase
 
             syncButton.setStyle("-fx-background-color:#000");
 
+            // Rotate that image for visualization
             new Thread(() -> {
                 RotateTransition rotate = new RotateTransition();
                 rotate.setByAngle(360); rotate.setCycleCount(3);

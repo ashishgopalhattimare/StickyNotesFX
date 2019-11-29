@@ -9,7 +9,6 @@ public class UserDetail
     private String password;
 
     public UserDetail() {}
-
     public UserDetail(String username, String email, String password) {
         this.username = username; this.email = email; this.password = password;
     }
@@ -18,6 +17,12 @@ public class UserDetail
     public String getPassword() { return password; }
     public String getEmail() { return email; }
 
+    /**
+     * Method Name : passwordHash
+     * Purpose : Get the hash of the password
+     * @param password - user's password
+     * @return - the hash of the password
+     */
     public static String passwordHash(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -25,12 +30,15 @@ public class UserDetail
 
             StringBuilder sb = new StringBuilder();
             byte[] bytes = md.digest();
-            for(int i=0; i< bytes.length ;i++) {
-                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-            }
+            for (byte aByte : bytes) {
+                sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+            }// end for
+
             password = sb.toString();
         }
-        catch (Exception e) { e.printStackTrace(); }
+        catch (Exception ignored) { } // end try/catch
         return password;
-    }
-}
+
+    }// end passwordHash(String)
+
+}// end UserDetail class

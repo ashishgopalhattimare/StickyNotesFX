@@ -14,6 +14,11 @@ import sample.Firebase.FirebaseConfig;
 
 public class Main extends Application {
 
+    /**
+     * Purpose : Start the application from here
+     * @param primaryStage
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 

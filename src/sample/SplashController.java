@@ -28,12 +28,17 @@ public class SplashController implements Initializable {
         FadeTransition fadeOut = new FadeTransition(Duration.seconds(2.3), pane);
         fadeOut.setFromValue(1); fadeOut.setToValue(0);
 
-        fadeOut.play();
+        fadeOut.play(); // Start the splash loading
+
+        // After the splash event ents
         fadeOut.setOnFinished(event -> {
             try {
+                // Get the current username and password, if exists
                 String [] userInfo = FileRW.readFile();
 
-                if(userInfo == null || userInfo.length != 2) {
+                // If the userInfo is invalid or empty, open login page
+                if(userInfo == null || userInfo.length != 2)
+                {
                     Stage primaryStage = new Stage();
                     Parent root = FXMLLoader.load(getClass().getResource("views/login.fxml"));
                     primaryStage.initStyle(StageStyle.UNDECORATED);
@@ -42,22 +47,24 @@ public class SplashController implements Initializable {
                     primaryStage.setAlwaysOnTop(true);
                     primaryStage.show();
                 }
+                // username and password are present, assume they are not modified "externally"
                 else {
+                    // Try to Login
                     if(FirebaseConfig.userExistLogin(userInfo[0], userInfo[1])) {
                         FirebaseConfig.AddUser();
-                    }
-                }
+                    }// end if
+                }// end if
             }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+            catch (Exception ignored) {}
             finally {
                 Stage stage = (Stage) progressBar.getScene().getWindow();
                 stage.close();
-            }
+            }// end try/catch/finally
         });
-    }
 
+    }// end initialise(URL, ResourceBundle)
+
+    // Open the Sticky Frame for the user
     public void generateStickyFrame() {
         try {
             Stage primaryStage = new Stage();
@@ -67,7 +74,8 @@ public class SplashController implements Initializable {
             primaryStage.getIcons().add(new Image("/images/logo.png"));
             primaryStage.setScene(new Scene(root));
 
-            primaryStage.setX(Constants.WINDOW_WIDTH-350);
+            // Fix its position on Top-Right of the window
+            primaryStage.setX(Constants.WINDOW_WIDTH - 350);
             primaryStage.setY(0);
 
             primaryStage.show();
@@ -75,6 +83,8 @@ public class SplashController implements Initializable {
             Constants.stickyStage = primaryStage;
             new SettingController().setSettingStage();
         }
-        catch (Exception e) {}
-    }
-}
+        catch (Exception ignored) {} // end try/catch
+
+    }// end generateStickyFrame()
+
+}// end SplashController  class

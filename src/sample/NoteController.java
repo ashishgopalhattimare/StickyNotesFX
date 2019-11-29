@@ -61,6 +61,9 @@ public class NoteController implements Initializable {
         colorDisplay = false; fadeInProcess = false;
         separator.setOpacity(0);
 
+        /**
+         * Open new Note in a new separate stage for writing new content
+         */
         addButton.setOnMouseEntered(event -> addButton.setStyle("-fx-background-color:" + Constants.selectColor));
         addButton.setOnMouseReleased(event -> addButton.setStyle(""));
         addButton.setOnMouseExited(event -> addButton.setStyle(""));
@@ -73,141 +76,199 @@ public class NoteController implements Initializable {
 
                 addButton.setStyle("-fx-background-color:" + Constants.selectColor);
 
+                // Choose a random color for this new note
                 Constants.randomColor = (int) (Math.random() * Constants.LENGTH);
                 Constants.currStage = stage;
-                Constants.openedNotes++;
 
-                stage.show();
+                Constants.openedNotes++; // Increase the number of opened stages on the platform by 1
 
-                stage.setOnCloseRequest(e -> {
-                    FirebaseConfig.syncUserData();
-                    Constants.openedNotes--;
+                stage.show(); // display the note stage
+
+                // Once the stage is closed, performt the following action
+                stage.setOnCloseRequest(syncData -> {
+
+                    FirebaseConfig.syncUserData(); // Sync the note of the user in the Google Firebase
+                    Constants.openedNotes--; // decreaes the number of the opened stages on the platform by 1
+
+                    // If the count reaches 0, force the application to close
                     if(Constants.mainWindowClosed && Constants.openedNotes == 0) {
                         System.exit(0);
-                    }
+                    }// end if
                 });
             }
-            catch (Exception e) {}
+            catch (Exception ignored) {} // end try/catch
         });
 
+        /**
+         * Delete the current Note from the user's account as well
+         */
         deleteButton.setOnMouseEntered(event -> deleteButton.setStyle("-fx-background-color:" + Constants.selectColor));
         deleteButton.setOnMouseReleased(event -> deleteButton.setStyle(""));
         deleteButton.setOnMouseExited(event -> deleteButton.setStyle(""));
         deleteButton.setOnMouseClicked(this::deleteNote);
 
+        /**
+         * Mark this note as favourite
+         */
         favouriteButton.setOnMouseEntered(event -> favouriteButton.setStyle("-fx-background-color:" + Constants.selectColor));
         favouriteButton.setOnMouseReleased(event -> favouriteButton.setStyle(""));
         favouriteButton.setOnMouseExited(event -> favouriteButton.setStyle(""));
         favouriteButton.setOnMouseClicked(event -> {
-            if(cardDetail != null) {
+            if(cardDetail != null){
                 cardDetail.setFavourite(!cardDetail.isFavourite());
                 cardFavourite = cardDetail.isFavourite();
             }
             else {
                 cardFavourite = !(cardFavourite);
-            }
+            }// end if
 
+            // Update the image of the favourite
             if(cardFavourite) favouriteImage.setImage(new Image("/images/isfavourite.png"));
             else favouriteImage.setImage(new Image("/images/notfavourite.png"));
-
         });
 
+        /**
+         * If the user wants to change the color of the user's note
+         */
         ellipseButton.setOnMouseEntered(event -> ellipseButton.setStyle("-fx-background-color:" + Constants.selectColor));
         ellipseButton.setOnMouseReleased(event -> ellipseButton.setStyle(""));
         ellipseButton.setOnMouseExited(event -> ellipseButton.setStyle(""));
         ellipseButton.setOnMouseClicked(event -> {
-            if(fadeInProcess == false) {
+
+            // If the animation of the color display is not in progress
+            if(!fadeInProcess)
+            {
                 ellipseButton.setStyle("-fx-background-color:" + Constants.selectColor);
                 fadeInProcess = true;
 
-                if(colorDisplay == false) { displayColors(fadeArray, Constants.LENGTH-1); }
+                // Display the colors on order
+                if(!colorDisplay) { displayColors(fadeArray, Constants.LENGTH-1); }
                 else {
                     separator.setOpacity(0); disappearColors(fadeArray, 0);
                 }
 
+                // Toggle when to open and close the color bar
                 colorDisplay = !(colorDisplay);
-            }
+            }// end if
         });
 
+        // Perform action of every KeyEvent on the note
         noteArea.setOnKeyReleased(event -> {
-            if(cardDetail != null) {
+            // Card does not exist, if the note is empty
+            if(cardDetail != null) { // note object is not currently created on the system
+
+                // Update the text of the card object on the array
                 cardDetail.getCard().textArea.setText(noteArea.getText());
+                // Directly update the card text
                 cardDetail.setText(noteArea.getText());
 
-                if(noteArea.getText().length() > 0) { // if the note is not empty
+                // If the note is not empty
+                if(noteArea.getText().length() > 0) {
 
-                    cardDetail.setDateTime();
+                    cardDetail.setDateTime(); // update the last updated time of the note
 
+                    // The current note is not the top note of the list as they are they by most recently
+                    // used to least recently used note
                     if(StickyController.s_recyclerView.getItems().get(0) != cardDetail) {
 
+                        // Remove the note from the lists
                         StickyController.s_recyclerView.getItems().remove(cardDetail);
                         StickyController.cardList.remove(cardDetail);
 
+                        // Append the note at the top of the list
                         StickyController.s_recyclerView.getItems().add(0, cardDetail);
                         StickyController.cardList.add(0, cardDetail);
                     }
+                    // Directly update the first note
                     else {
                         cardDetail.getCard().date.setText(cardDetail.getDate());
-                    }
+                    }// end if
                 }
-                else { // if the note is empty, remove it from the Sticky List
+                // if the note is empty, remove it from the Sticky List
+                else {
+                    // Remove the note from the list
                     StickyController.s_recyclerView.getItems().remove(cardDetail);
                     StickyController.cardList.remove(cardDetail);
                     cardDetail = null;
-                }
+                }// end if
             }
             else {
                 // note does not exist, and is not empty -> place it at the top of the Sticky List
-                if(noteArea.getText().length() > 0) {
+                if(noteArea.getText().length() > 0)
+                {
                     cardDetail = new CardDetail(noteArea.getText(), cardColor, cardFavourite);
-
                     StickyController.s_recyclerView.getItems().add(0, cardDetail);
                     StickyController.cardList.add(0, cardDetail);
-                }
-            }
+                }// end if
+            }// end if
         });
 
-        imageView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Pane>() {
-            @Override
-            public void changed(ObservableValue<? extends Pane> observable, Pane oldValue, Pane newValue) {
+        cardColor = Constants.randomColor; // Get the color of the card
+        fillTitleBarColor(Constants.HEXCOLOR[cardColor]); // fill the color
 
-                System.out.println(imageView.getSelectionModel().getSelectedIndex());
-            }
-        });
+        cardDetail = Constants.card; // get the card details
+        Constants.card = null; // next card
 
-        cardColor = Constants.randomColor;
-        fillTitleBarColor(Constants.HEXCOLOR[cardColor]);
+    }// end initialize(URL, ResourceBundle)
 
-        cardDetail = Constants.card;
-        Constants.card = null;
-    }
 
+
+    /**
+     * Method Name : fillTitleBarColor
+     * Purpose : Change the color of the note bar
+     *
+     * @param color - color to which the note bar has to be updated
+     */
     private void fillTitleBarColor(String color) {
         rightPane.setStyle("-fx-background-color:" + color);
         leftPane.setStyle("-fx-background-color:" + color);
         midPane.setStyle("-fx-background-color:" + color);
-    }
-    
+
+    }// end fillTitleBarColor(String)
+
+    /**
+     * Method Name : colorHandler
+     * Purpose : From the range of colors, decide the color and update the note bar to that color
+     *
+     * @param event
+     */
     public void colorHandler(ActionEvent event) {
 
         if(fadeInProcess && cardDetail == null) return;
 
+        // Iterate through all the colors panes
         for(int i = 0; i < Constants.LENGTH; i++) {
-            if(event.getSource() == arrColor[i]) {
-                cardColor = i;
+            if(event.getSource() == arrColor[i]) { // if the pane index found
+                cardColor = i; // get the color at that index
 
+                // Update the note bar color
                 fillTitleBarColor(Constants.HEXCOLOR[cardColor = i]);
+
+                // If the cardDetail exists, then store the details as well
                 try {
                     cardDetail.getCard().colorPane.setStyle("-fx-background-color: " + Constants.HEXCOLOR[cardColor]);
                     cardDetail.getCard().date.setStyle("-fx-text-fill: " + Constants.HEXCOLOR[cardColor]);
                     cardDetail.setColor(cardColor);
                 }
-                catch (Exception e) {}
+                catch (Exception e) {} // end try/catch
+
                 break;
-            }
-        }
+            }// end if
+        }// end for
+
+    }// end colorHandler(ActionEvent)
+
+    // Update the notepad text
+    public void setNoteArea(String text) {
+        noteArea.setText(text);
     }
 
+    /**
+     * Method Name : displayColors
+     * Purpose : display the colors on the note bar
+     * @param fadeArray - the color which should be displayed now
+     * @param index - index of the color displaying away
+     */
     private void displayColors(FadeTransition[] fadeArray, int index) {
         if(index == -1) { fadeInProcess = false; separator.setOpacity(1); return;}
 
@@ -216,8 +277,15 @@ public class NoteController implements Initializable {
         fadeArray[index].play();
 
         fadeArray[index].setOnFinished(event -> displayColors(fadeArray, index-1));
-    }
 
+    }// end displayColors(FaderTransition[], int)
+
+    /**
+     * Method Name : disappearColors
+     * Purpose : disappear the colors from the note, if not in use
+     * @param fadeArray - the color which should be faded now
+     * @param index - index of the color fading away
+     */
     private void disappearColors(FadeTransition[] fadeArray, int index) {
         if(index == Constants.LENGTH) { fadeInProcess = false; return; }
 
@@ -225,43 +293,56 @@ public class NoteController implements Initializable {
         fadeArray[index].setToValue(0);
         fadeArray[index].play();
         fadeArray[index].setOnFinished(event -> disappearColors(fadeArray, index + 1));
-    }
 
-    public void setNoteArea(String text) {
-        noteArea.setText(text);
-    }
+    }// end disappearColors(FadeTransition[], int)
 
+    // Update the favourite Image on the note
     public void setFavouriteImage(boolean favourite) {
         if(favourite) favouriteImage.setImage(new Image("/images/isfavourite.png"));
         else favouriteImage.setImage(new Image("/images/notfavourite.png"));
-    }
 
-    @FXML public void mouseDragged(MouseEvent event) {
-        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        stage.setY(event.getScreenY() - note_y);
-        stage.setX(event.getScreenX() - note_x);
-    }
+    }// end setFavouriteImage(boolean)
 
-    @FXML public void mousePressed(MouseEvent event) {
-        note_x = event.getSceneX();
-        note_y = event.getSceneY();
-    }
-
+    /**
+     * Method Name : deleteNote
+     * Purpose : delete the current note from the user's account
+     *
+     * @param event
+     */
     private void deleteNote(MouseEvent event)
     {
+        // If the cardDetail exists, remove the card
         if(cardDetail != null)
         {
             StickyController.s_recyclerView.getItems().remove(cardDetail);
             StickyController.cardList.remove(cardDetail);
-        }
+        }// end if
 
-        FirebaseConfig.syncUserData();
-        Constants.openedNotes--;
+        FirebaseConfig.syncUserData(); // Sync the note of the user in the Google Firebase
+        Constants.openedNotes--; // decreaes the number of the opened stages on the platform by 1
+
+        // If the count reaches 0, force the application to close
         if(Constants.mainWindowClosed && Constants.openedNotes == 0) {
             System.exit(0);
-        }
+        }// end if
 
+        // Close this stage immediately
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         stage.close();
     }
-}
+
+    // ALLOW THE USER TO DRAG THE STAGE ON THE SCREEN
+    @FXML public void mouseDragged(MouseEvent event) {
+        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        stage.setY(event.getScreenY() - note_y);
+        stage.setX(event.getScreenX() - note_x);
+
+    }// end mouseDragged(MouseEvent)
+
+    @FXML public void mousePressed(MouseEvent event) {
+        note_x = event.getSceneX();
+        note_y = event.getSceneY();
+
+    }// end mousePressed(MouseEvent)
+
+}// end NoteController class
