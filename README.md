@@ -2,7 +2,7 @@
 There are online versions of software available where they provide **synchronization** of documents between different platforms. This application provides the same approach by taking user details in the beginning and keeping the user's notes synchronized in all platforms such as Desktop and Android.
 
 <p align="center">
-  <img src="https://github.com/ashishgopalhattimare/StickyNotes2/blob/master/screenshots/shot1.png" width="200" title="Application Logo">
+  <img src="https://github.com/ashishgopalhattimare/StickyNotesFX/blob/master/screenshots/shot1.png" width="200" title="Application Logo">
 </p>
 <p align="center"> <i> Fig.1 - Sticky Notes FX Logo. </i> </p>
 
@@ -13,7 +13,7 @@ There are online versions of software available where they provide **synchroniza
 4. If the user double-clicks on the note card, it opens up as a separate note.
 
 <p align="center">
-  <img src="https://github.com/ashishgopalhattimare/StickyNotes2/blob/master/screenshots/shot3.png" width="500" title="Application Logo">
+  <img src="https://github.com/ashishgopalhattimare/StickyNotesFX/blob/master/screenshots/shot3.png" width="500" title="Application Logo">
 </p>
 <p align="center"> <i> Fig.1 - Still shots from the Sticky Notes FX. </i> </p>
 
