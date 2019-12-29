@@ -13,7 +13,7 @@
     </properties>
     <root id="root">
       <element id="archive" name="StickyNotes2.jar">
-        <element id="module-output" name="StickyNotes2" />
+        <element id="module-output" name="StickyNotesFX" />
       </element>
     </root>
   </artifact>
